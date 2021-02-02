@@ -1,0 +1,68 @@
+extends base
+
+block content
+
+  // header
+  include includes/header.pug
+
+  // aside menu
+  include includes/aside-sidenav.pug
+  main.main
+
+    // main header
+    include includes/main-header.pug
+
+    // main overview
+    include includes/main-overview.pug
+
+    .main__cards
+      .card
+        .card__header
+          .card__header-title.text-light
+            | Your 
+            strong Events
+            a.card__header-link.text-bold(href='#') View All
+          .settings
+            .settings__block
+              i.fas.fa-edit
+            .settings__block
+              i.fas.fa-cog
+        .card__main
+          .card__row
+
+  // footer
+  include includes/footer.pug
+
+  //
+    main
+      .container
+        .row
+          form#form.col.s12.m8.offset-m1.xl7.offset-xl1
+            .row
+              .input-field.col.s12
+                input.validate(type='text' id='host' name='host' placeholder='smtp.mail.yahoo.com')
+                label(for='host') Host
+            .row
+              .input-field.col.s6
+                input.validate(type='number' id='port' name='port' placeholder='465')
+                label(for='port') Port
+              .input-field.col.s6
+                input.validate(type='text' id='service' name='service' placeholder='yahoo')
+                label(for='service') Service
+            .row
+              .input-field.col.s6
+                input.validate(type='email' id='authUser' name='authUser' placeholder='yourmail@yahoo.com')
+                label(for='authUser') Auth user
+              .input-field.col.s6
+                input.validate(type='text' id='authPass' name='authPass' placeholder='Your email APP password')
+                label(for='authPass') Auth pass
+              .validate.col.s12
+                p
+                  label(for='secure')
+                    input.validate.filled-in(type='checkbox' id='secure' name='secure' checked)
+                    span Secure
+            .row
+              .col.s12
+                button.btn.waves-effect.waves-light(type='submit') Submit
+        .row
+          section#data-list.col.s12
