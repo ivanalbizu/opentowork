@@ -1,12 +1,48 @@
 const indexedDB = window.indexedDB
 const form = document.querySelector('#form')
-const dataList = document.querySelector('#data-list')
+const dataList = document.querySelector('.data-list')
+
+let db
+const DB_NAME = 'nodemailer'
+const DB_VERSION = 1
+const STORE_NAME = 'transporter'
+
+const elFactory = (type, attributes, ...children) => {
+  const el = document.createElement(type)
+
+  for (key in attributes) {
+    el.setAttribute(key, attributes[key])
+  }
+
+  children.forEach(child => {
+    if (typeof child === 'string') {
+      el.appendChild(document.createTextNode(child))
+    } else {
+      el.appendChild(child)
+    }
+  })
+
+  return el
+}
+
+// Only cases for this possible options
+const inputType = text => {
+  let type
+  switch (text) {
+    case 'boolean':
+      type = 'checkbox'
+      break
+    case 'number':
+      type = 'number'
+      break
+    default:
+      type = 'text'
+      break;
+  }
+  return type
+}
 
 if (indexedDB && form) {
-  let db
-  const DB_NAME = 'nodemailer'
-  const DB_VERSION = 1
-  const STORE_NAME = 'transporter'
   const request = indexedDB.open(DB_NAME, DB_VERSION)
 
   request.onupgradeneeded = () => {
@@ -15,7 +51,7 @@ if (indexedDB && form) {
 
   request.onsuccess = () => {
     db = request.result
-    readData()
+    if (dataList) readData()
   }
 
   request.onerror = error => console.log('error :>> ', error)
@@ -26,23 +62,47 @@ if (indexedDB && form) {
     const request = objectStore.add(data)
   }
 
-  const drawTransporters = cursorValue => {
+  const drawTransporters = (cursorValue, stop = false) => {
+    if (cursorValue.length === 0) {
+      dataList.innerHTML = 'No tienes ningún transporter'
+      return
+    }
+    let i = 0;
     for (let field in cursorValue) {
+      i++
       const obj = cursorValue[field]
       const fragment = new DocumentFragment()
-      const card = document.createElement('div')
-      const cardContent = document.createElement('div')
-      card.classList.add('card', 'indigo')
+      const form = document.createElement('form')
+      form.classList.add('form', 'disabled')
       for (let fieldChild in obj) {
-        cardContent.classList.add('card-content', 'white-text')
-        const p = document.createElement('p')
-        p.textContent = obj[fieldChild]
-        cardContent.appendChild(p)
+        const markup = elFactory(
+          'div', { class: `${fieldChild} input-field` },
+          elFactory('label', { class: fieldChild == 'secure' ? 'label label--checkbox' : 'label'},
+            elFactory('span', {}, fieldChild),
+            elFactory('input', {
+              type: inputType(typeof obj[fieldChild]),
+              value: obj[fieldChild],
+              name: fieldChild+i,
+              id: fieldChild+i
+            })
+          ),
+        )
+        form.appendChild(markup)
       }
-      card.appendChild(cardContent)
-      fragment.appendChild(card)
+      const button = elFactory(
+        'div', { class: 'button input-field' },
+        elFactory('button', {
+            class: 'btn',
+            type: 'submit'
+          },
+          'Actualizar'
+        ),
+      )
+      form.appendChild(button)
+      fragment.appendChild(form)
 
       dataList.appendChild(fragment)
+      if (stop == i) break
     }
   }
 
@@ -51,7 +111,7 @@ if (indexedDB && form) {
     const objectStore = transaction.objectStore(STORE_NAME)
     if ('getAll' in objectStore) {
       objectStore.getAll().onsuccess = event => {
-        drawTransporters(event.target.result)
+        drawTransporters(event.target.result, 1)
       }
     } else {
       const transporters = []
@@ -62,7 +122,7 @@ if (indexedDB && form) {
           transporters.push(cursor.value)
           cursor.continue()
         } else {
-          drawTransporters(transporters)
+          drawTransporters(transporters, 1)
         }
       }
     }
@@ -148,7 +208,6 @@ const toggleClass = (el, className) => {
 const addResizeListeners = () => {
   window.addEventListener('resize', () => {
     const width = window.innerWidth
-    console.log('width: ', width)
 
     if (width > 750) {
       sidenavEl.classList.remove(SIDENAV_ACTIVE_CLASS)
@@ -160,7 +219,6 @@ const addResizeListeners = () => {
 // Menu open sidenav icon, shown only on mobile
 const setMenuClickListener = () => {
   document.querySelector('.header__menu').addEventListener('click', () => {
-    console.log('clicked menu icon')
     toggleClass(sidenavEl, SIDENAV_ACTIVE_CLASS)
     toggleClass(gridEl, GRID_NO_SCROLL_CLASS)
   })
