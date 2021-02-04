@@ -566,7 +566,7 @@ a {
 .overviewCard-description {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .overviewCard-title {
@@ -670,6 +670,9 @@ a {
 
 .footer__copyright {
   color: #1BBAE1;
+  display: inline-block;
+  transform: rotate(180deg);
+  padding-right: 5px;
 }
 
 .footer__icon {
@@ -680,6 +683,10 @@ a {
   color: #1BBAE1;
   cursor: pointer;
   font-weight: bold;
+}
+
+.footer p {
+  margin-bottom: 0;
 }
 
 @media only screen and (min-width: 46.875em) {
