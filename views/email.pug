@@ -1,0 +1,33 @@
+extends base
+
+block content
+
+  // header
+  include includes/header.pug
+
+  // aside menu
+  include includes/aside-sidenav.pug
+  main.main.transporter-page
+    .main__cards
+      h2.title-page Envía tu email
+      .card
+        .card__header
+          .card__header-title.text-light 
+            strong Envia un email 
+        .card__main
+          form
+            .input-field
+              label.label(for='addressee') 
+                span Destinatario
+                input(type='text' id='addressee' name='addressee' placeholder='Email del destinatario')
+            .input-field
+              label.label(for='subject') 
+                span Asunto
+                input(type='text' id='subject' name='subject' placeholder='Asunto del correo')
+            .input-field
+              textarea.textarea(name='html' rows='10' cols='50' placeholder='Escriba aquí el cuerpo del correo')
+            .input-field.button
+              button.btn.js-send-email(type='button') Enviar email
+
+  // footer
+  include includes/footer.pug

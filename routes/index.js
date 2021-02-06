@@ -6,36 +6,48 @@ app.get('/', (req, res) => {
   res.render('home')
 })
 
+app.get('/transporters', (req, res) => {
+  res.render('transporters')
+})
 
-async function main() {
-  const sender = "unai_albizu@yahoo.com"
+app.get('/email', (req, res) => {
+  res.render('email')
+})
+app.post('/email', async(req, res) => {
+  try {
+    await main(req.body)
+    res.json(req.body)
+  } catch (error) {
+    res.status(401).json(error);
+  }
+})
+
+
+const main = async data => {
   const transporter = nodemailer.createTransport({
-    host: 'smtp.mail.yahoo.com',
-    port: 465,
-    service:'yahoo',
+    host: data.host,
+    port: +data.port,
+    service: data.service,
     secure: true,
     auth: {
-      user: sender,
-      pass: 'fake!'
+      user: data.authUser,
+      pass: data.authPass
     },
     debug: false,
     logger: true
   })
 
-  let info = await transporter.sendMail({
-    from: `"Fred Foo 👻" <${sender}>`,
-    to: "ivan.gonzalez@redegal.com",
-    subject: "Hello ✔",
+  const info = await transporter.sendMail({
+    from: `"Fred Foo 👻" <${data.authUser}>`,
+    to: data.addressee,
+    subject: data.subject,
     text: "Hello world?",
-    html: "<b>Hello world?</b>",
+    html: data.html,
   })
 
   console.log("Message sent: %s", info.messageId);
   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info))
 }
-app.get('/mail', (req, res) => {
-  main().catch(console.error)
-  res.render('home')
-})
+
 
 module.exports = app

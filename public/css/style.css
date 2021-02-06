@@ -54,7 +54,7 @@ a, a:hover, a:visited {
   text-decoration: none;
 }
 
-input, button {
+input, button, textarea {
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
   border-radius: 0;
@@ -63,10 +63,6 @@ input, button {
 
 input[type="submit"], button {
   cursor: pointer;
-}
-
-input[type="number"] {
-  border: 1px solid;
 }
 
 html, body {
@@ -165,7 +161,7 @@ a {
 }
 
 .header__avatar {
-  background-image: url("https://dummyimage.com/100x100/000/fff");
+  background-image: url("https://ivanalbizu.eu/_nuxt/img/firma.a4e3403.85.png");
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 50%;
@@ -302,7 +298,7 @@ a {
 }
 
 .sidenav__profile-avatar {
-  background-image: url("https://dummyimage.com/100x100/000/fff");
+  background-image: url("https://ivanalbizu.eu/_nuxt/img/firma.a4e3403.85.png");
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 50%;
@@ -586,6 +582,10 @@ a {
   cursor: pointer;
 }
 
+.title-page {
+  width: 100%;
+}
+
 .card {
   display: flex;
   flex-direction: column;
@@ -731,7 +731,7 @@ a {
 .form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5em 2em;
+  gap: 0 2em;
   grid-template-areas: "host host" "port service" "auth-user auth-pass" "secure secure" "button button";
 }
 
@@ -786,6 +786,10 @@ a {
   grid-area: button;
 }
 
+.input-field:not(:last-of-type) {
+  margin-bottom: 1.5em;
+}
+
 .input-field .label {
   width: 100%;
   display: flex;
@@ -814,6 +818,12 @@ a {
   order: 1;
   margin-bottom: 0;
   padding-left: .4em;
+}
+
+.input-field .textarea {
+  width: 100%;
+  max-width: 100%;
+  padding: 1em;
 }
 
 .btn {

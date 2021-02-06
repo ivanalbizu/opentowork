@@ -1,0 +1,56 @@
+extends base
+
+block content
+
+  // header
+  include includes/header.pug
+
+  // aside menu
+  include includes/aside-sidenav.pug
+  main.main.transporter-page
+    .main__cards
+      h2.title-page Configura tus Transporters para hacer envíos de Emails
+      //
+        .card
+          .card__header
+            .card__header-title.text-light
+              | Crear 
+              strong nuevo Transporter 
+          .card__main
+            form#form.form
+              .input-field.host
+                label.label(for='host') 
+                  span Host
+                  input(type='text' id='host' name='host' placeholder='smtp.mail.yahoo.com')
+              .input-field.port
+                label.label(for='port')
+                  span Port
+                  input(type='number' id='port' name='port' placeholder='465')
+              .input-field.service
+                label.label(for='service')
+                  span Service
+                  input(type='text' id='service' name='service' placeholder='yahoo')
+              .input-field.authUser
+                label.label(for='authUser')
+                  span Auth user
+                  input(type='email' id='authUser' name='authUser' placeholder='yourmail@yahoo.com')
+              .input-field.authPass
+                label.label(for='authPass')
+                  span Auth pass
+                  input(type='text' id='authPass' name='authPass' placeholder='Your email APP password')
+              .input-field.secure
+                label.label.label--checkbox(for='secure')
+                  input(type='checkbox' id='secure' name='secure' checked)
+                  span Secure
+              .input-field.button
+                button.btn(type='submit') Crear nuevo
+
+      .card
+        .card__header
+          .card__header-title.text-light
+            | Tus 
+            strong Transporters 
+        .card__main.data-list
+
+  // footer
+  include includes/footer.pug

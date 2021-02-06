@@ -42,7 +42,7 @@ const inputType = text => {
   return type
 }
 
-if (indexedDB && form) {
+if (indexedDB) {
   const request = indexedDB.open(DB_NAME, DB_VERSION)
 
   request.onupgradeneeded = () => {
@@ -111,7 +111,7 @@ if (indexedDB && form) {
     const objectStore = transaction.objectStore(STORE_NAME)
     if ('getAll' in objectStore) {
       objectStore.getAll().onsuccess = event => {
-        drawTransporters(event.target.result, 1)
+        drawTransporters(event.target.result)
       }
     } else {
       const transporters = []
@@ -122,25 +122,29 @@ if (indexedDB && form) {
           transporters.push(cursor.value)
           cursor.continue()
         } else {
-          drawTransporters(transporters, 1)
+          drawTransporters(transporters)
         }
       }
     }
   }
 
-  form.addEventListener('submit', event => {
-    event.preventDefault()
-    const target = event.target
-    const data = {
-      host: target.host.value,
-      port: +target.port.value,
-      service: target.service.value,
-      secure: target.secure.checked,
-      authUser: target.authUser.value,
-      authPass: target.authPass.value
-    }
-    addData(data)
-  })
+
+
+  if (form) {
+    form.addEventListener('submit', event => {
+      event.preventDefault()
+      const target = event.target
+      const data = {
+        host: target.host.value,
+        port: +target.port.value,
+        service: target.service.value,
+        secure: target.secure.checked,
+        authUser: target.authUser.value,
+        authPass: target.authPass.value
+      }
+      addData(data)
+    })
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -149,7 +153,53 @@ document.addEventListener("DOMContentLoaded", () => {
   setUserDropdownListener()
   setMenuClickListener()
   setSidenavCloseListener()
+
+  const btnSendEmail = document.querySelector('.js-send-email')
+  if (btnSendEmail) {
+    btnSendEmail.addEventListener('click', sendEmail, true)
+  }
 })
+
+const sendEmail = event => {
+  const target = event.target
+  target.setAttribute('disabled', true)
+  const transaction = db.transaction([STORE_NAME])
+  const objectStore = transaction.objectStore(STORE_NAME)
+  const request = objectStore.get('unai_albizu@yahoo.com')
+  const addressee = document.querySelector('[name="addressee"]').value
+  const subject = document.querySelector('[name="subject"]').value
+  const html = document.querySelector('[name="html"]').value
+  target.closest('form').reset()
+  request.onsuccess = async () => {
+    if (request.result !== undefined) {
+      let response
+      try {
+        const data = { ...request.result, ...{html, subject, addressee} }
+        response = await postData('email', data)
+        target.removeAttribute('disabled')
+      } catch (error) {
+        console.error(error);
+      }
+      console.log(response)
+    } else {
+      console.log('No find results')
+    }
+  }
+}
+
+const postData = async (url = '', data = {}) => {
+  const response = await fetch(url, {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify(data)
+  })
+  return await response.json()
+}
+
 // Set constants and grab needed elements
 const sidenavEl = document.querySelector('.sidenav')
 const gridEl = document.querySelector('.grid')
