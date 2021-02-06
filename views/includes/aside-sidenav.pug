@@ -1,9 +1,9 @@
 aside.sidenav
   .sidenav__brand
     i.fas.fa-feather-alt.sidenav__brand-icon
-    a.sidenav__brand-link(href='#')
-      | Ux
-      span.text-light Pro
+    a.sidenav__brand-link(href='/')
+      | Open to 
+      span.text-light work
     i.fas.fa-times.sidenav__brand-close
   .sidenav__profile
     .sidenav__profile-avatar
@@ -17,18 +17,20 @@ aside.sidenav
         .navList__subheading.row.row--align-v-center
           span.navList__subheading-icon
             i.fas.fa-briefcase-medical
-          span.navList__subheading-title insurance
+          span.navList__subheading-title transporters
         ul.subList.subList--hidden
-          li.subList__item medical
-          li.subList__item vision
-          li.subList__item dental
+          li.subList__item
+            a(href='/transporters') listado
+          li.subList__item
+            a(href='/crear-transporters') crear
       li
         .navList__subheading.row.row--align-v-center
           span.navList__subheading-icon
             i.fas.fa-plane-departure
-          span.navList__subheading-title travel
+          span.navList__subheading-title email
         ul.subList.subList--hidden
-          li.subList__item domestic
+          li.subList__item
+            a(href='/email') enviar email
           li.subList__item foreign
           li.subList__item misc
       li

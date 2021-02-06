@@ -14,6 +14,11 @@ const elFactory = (type, attributes, ...children) => {
     el.setAttribute(key, attributes[key])
   }
 
+  if (el instanceof HTMLInputElement && el.type == 'checkbox') {
+    // this is a Hack, property "value" does not really exist for input type "checkbox"
+    if (el.value == 'true') el.setAttribute('checked', true)
+  }
+
   children.forEach(child => {
     if (typeof child === 'string') {
       el.appendChild(document.createTextNode(child))
@@ -77,7 +82,7 @@ if (indexedDB) {
       for (let fieldChild in obj) {
         const markup = elFactory(
           'div', { class: `${fieldChild} input-field` },
-          elFactory('label', { class: fieldChild == 'secure' ? 'label label--checkbox' : 'label'},
+          elFactory('label', { class: fieldChild == 'secure' || fieldChild == 'active' ? 'label label--checkbox' : 'label'},
             elFactory('span', {}, fieldChild),
             elFactory('input', {
               type: inputType(typeof obj[fieldChild]),
@@ -138,9 +143,10 @@ if (indexedDB) {
         host: target.host.value,
         port: +target.port.value,
         service: target.service.value,
-        secure: target.secure.checked,
         authUser: target.authUser.value,
-        authPass: target.authPass.value
+        authPass: target.authPass.value,
+        secure: target.secure.checked,
+        active: target.active.checked
       }
       addData(data)
     })
@@ -165,7 +171,7 @@ const sendEmail = event => {
   target.setAttribute('disabled', true)
   const transaction = db.transaction([STORE_NAME])
   const objectStore = transaction.objectStore(STORE_NAME)
-  const request = objectStore.get('unai_albizu@yahoo.com')
+  const request = objectStore.get('bsk_redegal@yahoo.com')
   const addressee = document.querySelector('[name="addressee"]').value
   const subject = document.querySelector('[name="subject"]').value
   const html = document.querySelector('[name="html"]').value

@@ -9,6 +9,9 @@ app.get('/', (req, res) => {
 app.get('/transporters', (req, res) => {
   res.render('transporters')
 })
+app.get('/crear-transporters', (req, res) => {
+  res.render('crear-transporters')
+})
 
 app.get('/email', (req, res) => {
   res.render('email')
@@ -28,7 +31,7 @@ const main = async data => {
     host: data.host,
     port: +data.port,
     service: data.service,
-    secure: true,
+    secure: data.secure,
     auth: {
       user: data.authUser,
       pass: data.authPass

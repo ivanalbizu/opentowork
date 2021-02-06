@@ -123,6 +123,8 @@ a {
   padding: 13px;
   left: 12px;
   background-color: #DADAE3;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   z-index: 1;
 }
@@ -419,6 +421,10 @@ a {
   padding: 8px;
   text-transform: capitalize;
   padding: 8px 30px;
+}
+
+.navList .subList__item a {
+  display: flex;
   color: #D3D3D3;
 }
 
@@ -732,7 +738,7 @@ a {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0 2em;
-  grid-template-areas: "host host" "port service" "auth-user auth-pass" "secure secure" "button button";
+  grid-template-areas: "host host" "port service" "auth-user auth-pass" "secure secure" "active active" "button button";
 }
 
 .form:not(:last-of-type) {
@@ -780,6 +786,10 @@ a {
 
 .secure {
   grid-area: secure;
+}
+
+.active {
+  grid-area: active;
 }
 
 .button {

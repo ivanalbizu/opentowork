@@ -152,6 +152,8 @@ a {
     padding: 13px;
     left: 12px;
     background-color: $color-mischka;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     z-index: 1;
 
@@ -437,7 +439,10 @@ a {
       padding: 8px;
       text-transform: capitalize;
       padding: 8px 30px;
-      color: $color-alto;
+      a {
+        display: flex;
+        color: $color-alto;
+      }
 
       &:first-child {
         padding-top: 8px;
@@ -786,6 +791,7 @@ a {
     "port service"
     "auth-user auth-pass"
     "secure secure"
+    "active active"
     "button button";
   &:not(:last-of-type) {
     margin-bottom: 3em;
@@ -814,6 +820,7 @@ a {
 .authUser { grid-area: auth-user; }
 .authPass { grid-area: auth-pass; }
 .secure { grid-area: secure; }
+.active { grid-area: active; }
 .button { grid-area: button; }
 
 .input-field {
