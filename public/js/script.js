@@ -56,7 +56,6 @@ if (indexedDB) {
 
   request.onsuccess = () => {
     db = request.result
-    console.log('db :>> ', db);
     if (dataList) drawTransporters(dataList, 1)
     if (dataLists) drawTransporters(dataLists)
   }
