@@ -56,6 +56,7 @@ if (indexedDB) {
 
   request.onsuccess = () => {
     db = request.result
+    console.log('db :>> ', db);
     if (dataList) drawTransporters(dataList, 1)
     if (dataLists) drawTransporters(dataLists)
   }
@@ -153,13 +154,14 @@ const createTransporter = event => {
   const transaction = db.transaction([STORE_NAME], 'readwrite')
   const objectStore = transaction.objectStore(STORE_NAME)
   const request = objectStore.add(data)
+  toast(document.querySelector('.toast'), 'Transporter creado correctamente')
 }
 const sendEmail = event => {
   const target = event.target
   target.setAttribute('disabled', true)
   const transaction = db.transaction([STORE_NAME])
   const objectStore = transaction.objectStore(STORE_NAME)
-  const request = objectStore.get('bsk_redegal@yahoo.com') //TO-DO
+  const request = objectStore.get('your_emaill@yahoo.com') //TO-DO
 
   const addressee = document.querySelector('[name="addressee"]').value
   const subject = document.querySelector('[name="subject"]').value
@@ -171,12 +173,16 @@ const sendEmail = event => {
       try {
         const data = { ...request.result, ...{html, subject, addressee} }
         response = await postData('email', data)
+        if (response.error) toast(document.querySelector('.toast'), 'Error enviando el email')
+        else toast(document.querySelector('.toast'), 'Email enviado correctamente')
         target.removeAttribute('disabled')
       } catch (error) {
+        toast(document.querySelector('.toast'), `Error en el envío: ${error}`)
         console.error(error)
       }
       console.log(response)
     } else {
+      toast(document.querySelector('.toast'), 'No tienes ningún Transporter para hacer envío de Emails')
       console.log('No find results')
     }
   }
@@ -194,7 +200,11 @@ const postData = async (url = '', data = {}) => {
   })
   return await response.json()
 }
-
+const toast = (el, msg) => {
+  el.textContent = msg;
+  el.classList.add('toast--active')
+  el.addEventListener("animationend", () => el.classList.remove('toast--active'), false)
+}
 // Set constants and grab needed elements
 const sidenavEl = document.querySelector('.sidenav')
 const gridEl = document.querySelector('.grid')

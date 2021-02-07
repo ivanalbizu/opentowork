@@ -20,8 +20,11 @@ app.post('/email', async(req, res) => {
   try {
     await main(req.body)
     res.json(req.body)
-  } catch (error) {
-    res.status(401).json(error);
+  } catch (err) {
+    res.status(401).json({
+      error: true,
+      err
+    })
   }
 })
 
@@ -41,14 +44,14 @@ const main = async data => {
   })
 
   const info = await transporter.sendMail({
-    from: `"Fred Foo 👻" <${data.authUser}>`,
+    from: `"Iván Albizu" <${data.authUser}>`,
     to: data.addressee,
     subject: data.subject,
     text: "Hello world?",
     html: data.html,
   })
 
-  console.log("Message sent: %s", info.messageId);
+  console.log("Message sent: %s", info.messageId)
   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info))
 }
 

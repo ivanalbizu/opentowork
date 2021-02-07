@@ -832,3 +832,35 @@ a {
     background-color: darken($color-fiord, 5%);
   }
 }
+@keyframes translateY {
+  0% {
+    opacity: 0;
+    bottom: -5em;
+  }
+  10% {
+    opacity: 1;
+    bottom: 1em;
+  }
+  90% {
+    opacity: 1;
+    bottom: 1em;
+  }
+  100% {
+    opacity: 0;
+    bottom: -5em;
+  }
+}
+.toast {
+  display: none;
+  position: fixed;
+  right: 1em;
+  bottom: -5em;
+  width: 300px;
+  padding: 1em;
+  background-color: purple;
+  color: #fff;
+  &--active {
+    display: flex;
+    animation: translateY 6s ease 0s forwards;
+  }
+}
