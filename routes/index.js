@@ -6,11 +6,11 @@ app.get('/', (req, res) => {
   res.render('home')
 })
 
-app.get('/transporters', (req, res) => {
-  res.render('transporters')
+app.get('/transporters/listar', (req, res) => {
+  res.render('transporters/listar')
 })
-app.get('/crear-transporters', (req, res) => {
-  res.render('crear-transporters')
+app.get('/transporters/crear', (req, res) => {
+  res.render('transporters/crear')
 })
 
 app.get('/email', (req, res) => {
