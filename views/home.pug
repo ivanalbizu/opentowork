@@ -15,17 +15,12 @@ block content
     // main overview
     include includes/main-overview.pug
 
-    .main__cards
+    .main__cards.data-list
       .card
         .card__header
           .card__header-title.text-light
             | Crear 
             strong nuevo Transporter 
-          .settings
-            .settings__block
-              i.fas.fa-edit
-            .settings__block
-              i.fas.fa-cog
         .card__main
           form#form.form
             .input-field.host
@@ -59,18 +54,6 @@ block content
             .input-field.button
               button.btn(type='submit') Crear nuevo
 
-      .card
-        .card__header
-          .card__header-title.text-light
-            | Tus 
-            strong Transporters 
-            a.card__header-link.text-bold(href='/transporters') Ver todo
-          .settings
-            .settings__block
-              i.fas.fa-edit
-            .settings__block
-              i.fas.fa-cog
-        .card__main.data-list
 
   // footer
   include includes/footer.pug

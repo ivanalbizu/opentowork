@@ -589,7 +589,7 @@ a {
 }
 
 .title-page {
-  width: 100%;
+  padding: 2em 1em .5em;
 }
 
 .card {
@@ -626,42 +626,6 @@ a {
 
 .card__main {
   padding: 2em 1.5em;
-}
-
-.settings {
-  display: flex;
-  margin: 8px;
-  background-color: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 2px;
-}
-
-.settings__block {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px;
-  color: #394263;
-  font-size: 11px;
-}
-
-.settings__block:not(:last-child) {
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.settings__icon {
-  padding: 0px 3px;
-  font-size: 12px;
-}
-
-.settings__icon:hover {
-  background-color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-}
-
-.settings:hover {
-  background-color: #fff;
-  cursor: pointer;
 }
 
 .footer {

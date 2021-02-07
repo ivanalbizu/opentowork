@@ -609,7 +609,7 @@ a {
   }
 }
 .title-page {
-  width: 100%;
+  padding: 2em 1em .5em;
 }
 .card {
   display: flex;
@@ -645,47 +645,7 @@ a {
   &__main {
     padding: 2em 1.5em;
   }
-
-
 }
-
-// Card header settings icons
-.settings {
-  display: flex;
-  margin: 8px;
-  background-color: $color-transparent;
-  border: 1px solid rgba(0,0,0,.1);
-  border-radius: 2px;
-
-  &__block {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px;
-    color: $color-fiord;
-    font-size: 11px;
-
-    &:not(:last-child) {
-      border-right: 1px solid rgba(0,0,0,.1);
-    }
-  }
-
-  &__icon {
-    padding: 0px 3px;
-    font-size: 12px;
-
-    &:hover {
-      background-color: rgba(255,255,255,.8);
-      cursor: pointer;
-    }
-  }
-
-  &:hover {
-    background-color: #fff;
-    cursor: pointer;
-  }
-}
-
 
 .footer {
   grid-area: footer;

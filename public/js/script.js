@@ -1,6 +1,6 @@
 const indexedDB = window.indexedDB
-const form = document.querySelector('#form')
 const dataList = document.querySelector('.data-list')
+const dataLists = document.querySelector('.data-lists')
 
 let db
 const DB_NAME = 'nodemailer'
@@ -15,7 +15,7 @@ const elFactory = (type, attributes, ...children) => {
   }
 
   if (el instanceof HTMLInputElement && el.type == 'checkbox') {
-    // this is a Hack, property "value" does not really exist for input type "checkbox"
+    // this is a Hack. Property "value" does not really exist for input type "checkbox"
     if (el.value == 'true') el.setAttribute('checked', true)
   }
 
@@ -42,7 +42,7 @@ const inputType = text => {
       break
     default:
       type = 'text'
-      break;
+      break
   }
   return type
 }
@@ -56,100 +56,67 @@ if (indexedDB) {
 
   request.onsuccess = () => {
     db = request.result
-    if (dataList) readData()
+    if (dataList) drawTransporters(dataList, 1)
+    if (dataLists) drawTransporters(dataLists)
   }
 
   request.onerror = error => console.log('error :>> ', error)
 
-  const addData = data => {
-    const transaction = db.transaction([STORE_NAME], 'readwrite')
-    const objectStore = transaction.objectStore(STORE_NAME)
-    const request = objectStore.add(data)
-  }
-
-  const drawTransporters = (cursorValue, stop = false) => {
-    if (cursorValue.length === 0) {
-      dataList.innerHTML = 'No tienes ningún transporter'
-      return
-    }
-    let i = 0;
-    for (let field in cursorValue) {
-      i++
-      const obj = cursorValue[field]
-      const fragment = new DocumentFragment()
-      const form = document.createElement('form')
-      form.classList.add('form', 'disabled')
-      for (let fieldChild in obj) {
-        const markup = elFactory(
-          'div', { class: `${fieldChild} input-field` },
-          elFactory('label', { class: fieldChild == 'secure' || fieldChild == 'active' ? 'label label--checkbox' : 'label'},
-            elFactory('span', {}, fieldChild),
-            elFactory('input', {
-              type: inputType(typeof obj[fieldChild]),
-              value: obj[fieldChild],
-              name: fieldChild+i,
-              id: fieldChild+i
-            })
-          ),
-        )
-        form.appendChild(markup)
-      }
-      const button = elFactory(
-        'div', { class: 'button input-field' },
-        elFactory('button', {
-            class: 'btn',
-            type: 'submit'
-          },
-          'Actualizar'
-        ),
-      )
-      form.appendChild(button)
-      fragment.appendChild(form)
-
-      dataList.appendChild(fragment)
-      if (stop == i) break
-    }
-  }
-
-  const readData = () => {
+  const drawTransporters = (parent, quantity = 999999) => {
     const transaction = db.transaction([STORE_NAME])
     const objectStore = transaction.objectStore(STORE_NAME)
-    if ('getAll' in objectStore) {
-      objectStore.getAll().onsuccess = event => {
-        drawTransporters(event.target.result)
-      }
-    } else {
-      const transporters = []
-      const request = objectStore.openCursor()
-      request.onsuccess = event => {
-        const cursor = event.target.result
-        if (cursor) {
-          transporters.push(cursor.value)
-          cursor.continue()
-        } else {
-          drawTransporters(transporters)
+
+    objectStore.getAll().onsuccess = event => {
+      const cursorValue = event.target.result
+      if (cursorValue.length === 0) return
+
+      for (let index = 0; index < cursorValue.length; index++) {
+        const field = cursorValue[index]
+        const card = elFactory('div', { class: 'card'})
+        const header = elFactory('div', { class: 'card__header'},
+          elFactory('div', { class: 'card__header-title text-light' }, field.authUser)
+        )
+        const main = elFactory('div', { class: 'card__main'})
+
+        card.appendChild(header)
+        card.appendChild(main)
+        const fragment = new DocumentFragment()
+        fragment.appendChild(card)
+
+        const form = document.createElement('form')
+        form.classList.add('form', 'disabled')
+
+        for (let fieldChild in field) {
+          const markup = elFactory(
+            'div', { class: `${fieldChild} input-field` },
+            elFactory('label', { class: fieldChild == 'secure' || fieldChild == 'active' ? 'label label--checkbox' : 'label'},
+              elFactory('span', {}, fieldChild),
+              elFactory('input', {
+                type: inputType(typeof field[fieldChild]),
+                value: field[fieldChild],
+                name: `${fieldChild}-${field.authUser}`,
+                id: `${fieldChild}-${field.authUser}`
+              })
+            ),
+          )
+          form.appendChild(markup)
         }
+        const button = elFactory(
+          'div', { class: 'button input-field' },
+          elFactory('button', {
+              class: 'btn',
+              type: 'submit'
+            },
+            'Actualizar'
+          ),
+        )
+        form.appendChild(button)
+        main.appendChild(form)
+
+        parent.appendChild(fragment)
+        if (quantity-1 == index) break
       }
     }
-  }
-
-
-
-  if (form) {
-    form.addEventListener('submit', event => {
-      event.preventDefault()
-      const target = event.target
-      const data = {
-        host: target.host.value,
-        port: +target.port.value,
-        service: target.service.value,
-        authUser: target.authUser.value,
-        authPass: target.authPass.value,
-        secure: target.secure.checked,
-        active: target.active.checked
-      }
-      addData(data)
-    })
   }
 }
 
@@ -164,14 +131,36 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnSendEmail) {
     btnSendEmail.addEventListener('click', sendEmail, true)
   }
+  const form = document.querySelector('#form')
+  if (form) {
+    form.addEventListener('submit', createTransporter, true)
+  }
 })
 
+const createTransporter = event => {
+  event.preventDefault()
+  const target = event.target
+  const data = {
+    host: target.host.value,
+    port: +target.port.value,
+    service: target.service.value,
+    authUser: target.authUser.value,
+    authPass: target.authPass.value,
+    secure: target.secure.checked,
+    active: target.active.checked
+  }
+  event.target.closest('form').reset()
+  const transaction = db.transaction([STORE_NAME], 'readwrite')
+  const objectStore = transaction.objectStore(STORE_NAME)
+  const request = objectStore.add(data)
+}
 const sendEmail = event => {
   const target = event.target
   target.setAttribute('disabled', true)
   const transaction = db.transaction([STORE_NAME])
   const objectStore = transaction.objectStore(STORE_NAME)
-  const request = objectStore.get('bsk_redegal@yahoo.com')
+  const request = objectStore.get('bsk_redegal@yahoo.com') //TO-DO
+
   const addressee = document.querySelector('[name="addressee"]').value
   const subject = document.querySelector('[name="subject"]').value
   const html = document.querySelector('[name="html"]').value
@@ -184,7 +173,7 @@ const sendEmail = event => {
         response = await postData('email', data)
         target.removeAttribute('disabled')
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
       console.log(response)
     } else {
