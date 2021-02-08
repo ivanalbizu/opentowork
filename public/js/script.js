@@ -76,6 +76,7 @@ if (indexedDB) {
         const header = elFactory('div', { class: 'card__header'},
           elFactory('div', { class: 'card__header-title text-light' }, field.authUser)
         )
+        const buttons = elFactory('div', { class: 'button' })
         const main = elFactory('div', { class: 'card__main'})
 
         card.appendChild(header)
@@ -101,17 +102,23 @@ if (indexedDB) {
           )
           form.appendChild(markup)
         }
-        const button = elFactory(
-          'div', { class: 'button input-field' },
-          elFactory('button', {
-              class: 'btn',
-              type: 'submit'
-            },
-            'Actualizar'
-          ),
+        form.appendChild(buttons)
+        const buttonUpdate = elFactory('button', {
+          class: 'btn input-field',
+          type: 'submit'
+          },
+          'Actualizar'
         )
-        button.addEventListener('click', updateTransporter, true)
-        form.appendChild(button)
+        const buttonDelete = elFactory('button', {
+          class: 'btn input-field',
+          type: 'submit'
+          },
+          'Eliminar'
+        )
+        buttonUpdate.addEventListener('click', updateTransporter, true)
+        buttonDelete.addEventListener('click', deleteTransporter, true)
+        buttons.appendChild(buttonUpdate)
+        buttons.appendChild(buttonDelete)
         main.appendChild(form)
 
         parent.appendChild(fragment)
@@ -138,6 +145,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 })
+
+const deleteTransporter = event => {
+  event.preventDefault()
+  console.log('TO-DO delete');
+}
+
 const updateTransporter = event => {
   event.preventDefault()
 
