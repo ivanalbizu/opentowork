@@ -84,7 +84,7 @@ if (indexedDB) {
         fragment.appendChild(card)
 
         const form = document.createElement('form')
-        form.classList.add('form', 'disabled')
+        form.classList.add('form')
 
         for (let fieldChild in field) {
           const markup = elFactory(
@@ -110,6 +110,7 @@ if (indexedDB) {
             'Actualizar'
           ),
         )
+        button.addEventListener('click', updateTransporter, true)
         form.appendChild(button)
         main.appendChild(form)
 
@@ -135,7 +136,38 @@ document.addEventListener("DOMContentLoaded", () => {
   if (form) {
     form.addEventListener('submit', createTransporter, true)
   }
+
 })
+const updateTransporter = event => {
+  event.preventDefault()
+
+  const target = event.target
+  const form = target.closest('.form')
+  const email = form.querySelector('.authUser input').value
+  
+  target.setAttribute('disabled', true)
+  const transaction = db.transaction([STORE_NAME], 'readwrite')
+  const objectStore = transaction.objectStore(STORE_NAME)
+  const request = objectStore.get(email)
+
+  request.onsuccess = () => {
+    if (request.result !== undefined) {
+      const data = {}
+      for (const key in request.result) {
+        const el = form.querySelector(`.${key} input`)
+        console.log('el.type :>> ', el.type);
+        if (el.type == 'number') data[key] = +el.value
+        if (el.type == 'checkbox') data[key] = el.checked
+        else data[key] = el.value
+      }
+      objectStore.put(data)
+      toast(document.querySelector('.toast'), 'Se ha actualizado correctamente')
+      target.removeAttribute('disabled')
+    } else {
+      toast(document.querySelector('.toast'), 'Se ha producido un error al Actualizar')
+    }
+  }
+}
 
 const createTransporter = event => {
   event.preventDefault()
@@ -160,7 +192,7 @@ const sendEmail = event => {
   target.setAttribute('disabled', true)
   const transaction = db.transaction([STORE_NAME])
   const objectStore = transaction.objectStore(STORE_NAME)
-  const request = objectStore.get('your_emaill@yahoo.com') //TO-DO
+  const request = objectStore.get('bsk_redegal@yahoo.com') //TO-DO
 
   const addressee = document.querySelector('[name="addressee"]').value
   const subject = document.querySelector('[name="subject"]').value
