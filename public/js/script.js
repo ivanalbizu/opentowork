@@ -115,8 +115,8 @@ if (indexedDB) {
           },
           'Eliminar'
         )
-        buttonUpdate.addEventListener('click', updateTransporter, true)
-        buttonDelete.addEventListener('click', deleteTransporter, true)
+        buttonUpdate.addEventListener('click', updateTransporter.bind(null, card), true)
+        buttonDelete.addEventListener('click', deleteTransporter.bind(null, card), true)
         buttons.appendChild(buttonUpdate)
         buttons.appendChild(buttonDelete)
         main.appendChild(form)
@@ -146,19 +146,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })
 
-const deleteTransporter = event => {
+const deleteTransporter = (card, event) => {
   event.preventDefault()
-  console.log('TO-DO delete');
+  const email = card.querySelector('.authUser input').value
+  const transaction = db.transaction([STORE_NAME], 'readwrite')
+  const objectStore = transaction.objectStore(STORE_NAME)
+  const request = objectStore.delete(email)
+
+  request.onsuccess = () => {
+    toast(document.querySelector('.toast'), 'Se ha eliminado correctamente')
+    card.remove()
+  }
 }
 
-const updateTransporter = event => {
+const updateTransporter = (card, event) => {
   event.preventDefault()
 
-  const target = event.target
-  const form = target.closest('.form')
-  const email = form.querySelector('.authUser input').value
+  const email = card.querySelector('.authUser input').value
   
-  target.setAttribute('disabled', true)
+  event.target.setAttribute('disabled', true)
   const transaction = db.transaction([STORE_NAME], 'readwrite')
   const objectStore = transaction.objectStore(STORE_NAME)
   const request = objectStore.get(email)
@@ -167,15 +173,14 @@ const updateTransporter = event => {
     if (request.result !== undefined) {
       const data = {}
       for (const key in request.result) {
-        const el = form.querySelector(`.${key} input`)
-        console.log('el.type :>> ', el.type);
+        const el = card.querySelector(`.${key} input`)
         if (el.type == 'number') data[key] = +el.value
         if (el.type == 'checkbox') data[key] = el.checked
         else data[key] = el.value
       }
       objectStore.put(data)
       toast(document.querySelector('.toast'), 'Se ha actualizado correctamente')
-      target.removeAttribute('disabled')
+      event.target.removeAttribute('disabled')
     } else {
       toast(document.querySelector('.toast'), 'Se ha producido un error al Actualizar')
     }
