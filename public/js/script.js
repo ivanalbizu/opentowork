@@ -92,7 +92,7 @@ if (indexedDB) {
         for (let fieldChild in field) {
           const markup = elFactory(
             'div', { class: `${fieldChild} input-field` },
-            elFactory('label', { class: fieldChild == 'secure' || fieldChild == 'active' ? 'label label--checkbox' : 'label'},
+            elFactory('label', { class: fieldChild == 'secure' ? 'label label--checkbox' : 'label'},
               elFactory('span', {}, fieldChild),
               elFactory('input', {
                 type: inputType(typeof field[fieldChild]),
@@ -219,15 +219,13 @@ const createTransporter = event => {
     service: target.service.value,
     authUser: target.authUser.value,
     authPass: target.authPass.value,
-    secure: target.secure.checked,
-    active: target.active.checked
+    secure: target.secure.checked
   }
   event.target.closest('form').reset()
   const transaction = db.transaction([STORE_NAME], 'readwrite')
   const objectStore = transaction.objectStore(STORE_NAME)
   const request = objectStore.add(data)
   toast(document.querySelector('.toast'), 'Transporter creado correctamente')
-  if (data.active) localStorage.setItem('activeTransporter', data.authUser)
 }
 const sendEmail = event => {
   const target = event.target
