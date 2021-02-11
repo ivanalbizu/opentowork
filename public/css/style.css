@@ -54,7 +54,7 @@ a, a:hover, a:visited {
   text-decoration: none;
 }
 
-input, button, textarea {
+input, button, textarea, select {
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
   border-radius: 0;
@@ -771,17 +771,6 @@ a {
   align-items: center;
 }
 
-.input-field .label span {
-  margin-bottom: .2em;
-  text-transform: capitalize;
-}
-
-.input-field .label input {
-  border-width: 0 0 1px;
-  border-color: #777;
-  padding: .4em 0;
-}
-
 .input-field .label:not(.label--checkbox) span,
 .input-field .label:not(.label--checkbox) input {
   display: block;
@@ -792,6 +781,23 @@ a {
   order: 1;
   margin-bottom: 0;
   padding-left: .4em;
+}
+
+.input-field span {
+  margin-bottom: .2em;
+  text-transform: capitalize;
+}
+
+.input-field input,
+.input-field select {
+  border-width: 0 0 1px;
+  border-color: #777;
+  padding: .4em 0;
+}
+
+.input-field select {
+  display: block;
+  width: 100%;
 }
 
 .input-field .textarea {
@@ -805,6 +811,10 @@ a {
   color: #fff;
   border: 0;
   padding: .8em 1.5em;
+}
+
+.btn:not(:last-of-type) {
+  margin-right: 2em;
 }
 
 .btn:hover {

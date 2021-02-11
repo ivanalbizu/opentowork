@@ -46,7 +46,7 @@ ul {
 a, a:hover, a:visited {
   text-decoration: none;
 }
-input, button, textarea {
+input, button, textarea, select {
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
   border-radius: 0;
@@ -792,15 +792,6 @@ a {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    span {
-      margin-bottom: .2em;
-      text-transform: capitalize;
-    }
-    input {
-      border-width: 0 0 1px;
-      border-color: $color-abbey;
-      padding: .4em 0;
-    }
     &:not(.label--checkbox) {
       span,
       input {
@@ -816,6 +807,20 @@ a {
       }
     }
   }
+  span {
+    margin-bottom: .2em;
+    text-transform: capitalize;
+  }
+  input,
+  select {
+    border-width: 0 0 1px;
+    border-color: $color-abbey;
+    padding: .4em 0;
+  }
+  select {
+    display: block;
+    width: 100%;
+  }
   .textarea {
     width: 100%;
     max-width: 100%;
@@ -828,6 +833,9 @@ a {
   color: #fff;
   border: 0;
   padding: .8em 1.5em;
+  &:not(:last-of-type) {
+    margin-right: 2em;
+  }
   &:hover {
     background-color: darken($color-fiord, 5%);
   }

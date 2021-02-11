@@ -1,6 +1,7 @@
 const indexedDB = window.indexedDB
 const dataList = document.querySelector('.data-list')
 const dataLists = document.querySelector('.data-lists')
+const selectTransporter = document.querySelector('.js-select-transporter')
 
 let db
 const DB_NAME = 'nodemailer'
@@ -58,6 +59,7 @@ if (indexedDB) {
     db = request.result
     if (dataList) drawTransporters(dataList, 1)
     if (dataLists) drawTransporters(dataLists)
+    if (selectTransporter) drawSelectTransporter(selectTransporter)
   }
 
   request.onerror = error => console.log('error :>> ', error)
@@ -76,7 +78,7 @@ if (indexedDB) {
         const header = elFactory('div', { class: 'card__header'},
           elFactory('div', { class: 'card__header-title text-light' }, field.authUser)
         )
-        const buttons = elFactory('div', { class: 'button' })
+        const buttons = elFactory('div', { class: 'button input-field' })
         const main = elFactory('div', { class: 'card__main'})
 
         card.appendChild(header)
@@ -104,13 +106,13 @@ if (indexedDB) {
         }
         form.appendChild(buttons)
         const buttonUpdate = elFactory('button', {
-          class: 'btn input-field',
+          class: 'btn',
           type: 'submit'
           },
           'Actualizar'
         )
         const buttonDelete = elFactory('button', {
-          class: 'btn input-field',
+          class: 'btn',
           type: 'submit'
           },
           'Eliminar'
@@ -124,6 +126,27 @@ if (indexedDB) {
         parent.appendChild(fragment)
         if (quantity-1 == index) break
       }
+    }
+  }
+
+  const drawSelectTransporter = (parent) => {
+    const transaction = db.transaction([STORE_NAME])
+    const objectStore = transaction.objectStore(STORE_NAME)
+
+    objectStore.getAll().onsuccess = event => {
+      const cursorValue = event.target.result
+      if (cursorValue.length === 0) return
+
+      const fragment = new DocumentFragment()
+
+      for (let index = 0; index < cursorValue.length; index++) {
+        const field = cursorValue[index]
+        const option = elFactory(
+          'option', { value: `${field.authUser}` }, field.authUser
+        )
+        fragment.appendChild(option)
+      }
+      parent.appendChild(fragment)
     }
   }
 }
@@ -204,13 +227,16 @@ const createTransporter = event => {
   const objectStore = transaction.objectStore(STORE_NAME)
   const request = objectStore.add(data)
   toast(document.querySelector('.toast'), 'Transporter creado correctamente')
+  if (data.active) localStorage.setItem('activeTransporter', data.authUser)
 }
 const sendEmail = event => {
   const target = event.target
+  const selectedTransporter = document.querySelector('.js-select-transporter').value
   target.setAttribute('disabled', true)
   const transaction = db.transaction([STORE_NAME])
   const objectStore = transaction.objectStore(STORE_NAME)
-  const request = objectStore.get('bsk_redegal@yahoo.com') //TO-DO
+  const request = objectStore.get(selectedTransporter) //TO-DO
+  console.log('selectedTransporter :>> ', selectedTransporter);
 
   const addressee = document.querySelector('[name="addressee"]').value
   const subject = document.querySelector('[name="subject"]').value
@@ -250,7 +276,7 @@ const postData = async (url = '', data = {}) => {
   return await response.json()
 }
 const toast = (el, msg) => {
-  el.textContent = msg;
+  el.textContent = msg
   el.classList.add('toast--active')
   el.addEventListener("animationend", () => el.classList.remove('toast--active'), false)
 }

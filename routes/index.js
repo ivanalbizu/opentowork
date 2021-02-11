@@ -47,7 +47,7 @@ const main = async data => {
     from: `"Iván Albizu" <${data.authUser}>`,
     to: data.addressee,
     subject: data.subject,
-    text: "Hello world?",
+    text: data.html.replace(/<[^>]+>|&nbsp;/g, ''),
     html: data.html,
   })
 
