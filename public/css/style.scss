@@ -370,10 +370,10 @@ a {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 16px 8px;
-    color: $color-transparent;
+    padding: 8px 16px 8px;
+    color: #fff;
     text-transform: uppercase;
-    font-size: 15px;
+    font-size: 13px;
   }
 
   &__subheading {
@@ -436,9 +436,9 @@ a {
     transition: all .4s ease-in-out;
 
     &__item {
-      padding: 8px;
       text-transform: capitalize;
-      padding: 8px 30px;
+      padding: 8px 16px;
+      font-size: 14px;
       a {
         display: flex;
         color: $color-alto;
@@ -651,7 +651,7 @@ a {
   grid-area: footer;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 0 16px;
   color: $color-abbey;
   background-color: $color-white;
