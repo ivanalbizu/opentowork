@@ -112,7 +112,7 @@ if (indexedDB) {
           'Actualizar'
         )
         const buttonDelete = elFactory('button', {
-          class: 'btn',
+          class: 'btn btn--danger',
           type: 'submit'
           },
           'Eliminar'

@@ -811,14 +811,24 @@ a {
   color: #fff;
   border: 0;
   padding: .8em 1.5em;
+  transition: background .3s ease;
 }
 
 .btn:not(:last-of-type) {
   margin-right: 2em;
 }
 
-.btn:hover {
-  background-color: #303753;
+.btn:hover, .btn:focus {
+  background-color: #1d2232;
+  transition: background .2s ease;
+}
+
+.btn--danger {
+  background-color: #e67e22;
+}
+
+.btn--danger:hover, .btn--danger:focus {
+  background-color: #a85913;
 }
 
 @keyframes translateY {

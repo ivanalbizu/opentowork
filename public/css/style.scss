@@ -836,9 +836,19 @@ a {
   &:not(:last-of-type) {
     margin-right: 2em;
   }
-  &:hover {
-    background-color: darken($color-fiord, 5%);
+  &:hover,
+  &:focus {
+    background-color: darken($color-fiord, 15%);
+    transition: background .2s ease;
   }
+  &--danger {
+    background-color: $color-zest;
+    &:hover,
+    &:focus {
+      background-color: darken($color-zest, 15%);
+    }
+  }
+  transition: background .3s ease;
 }
 @keyframes translateY {
   0% {
