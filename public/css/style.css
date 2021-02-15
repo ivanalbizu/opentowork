@@ -167,7 +167,6 @@ a {
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.2);
   position: relative;
   margin: 0 26px;
   width: 35px;
@@ -304,7 +303,6 @@ a {
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.2);
   height: 64px;
   width: 64px;
   margin: 0 15px;
@@ -864,4 +862,10 @@ a {
 .toast--active {
   display: flex;
   animation: translateY 6s ease 0s forwards;
+}
+
+.contacts {
+  background-color: #fff;
+  margin: 1.25em;
+  padding: 1em;
 }

@@ -2,11 +2,13 @@ const indexedDB = window.indexedDB
 const dataList = document.querySelector('.data-list')
 const dataLists = document.querySelector('.data-lists')
 const selectTransporter = document.querySelector('.js-select-transporter')
+const contacts = document.querySelector('#contacts')
 
 let db
 const DB_NAME = 'nodemailer'
 const DB_VERSION = 1
-const STORE_NAME = 'transporter'
+const STORE_NAME_TRANSPORTER = 'transporter'
+const STORE_NAME_CONTACT = 'contact'
 
 const elFactory = (type, attributes, ...children) => {
   const el = document.createElement(type)
@@ -52,7 +54,8 @@ if (indexedDB) {
   const request = indexedDB.open(DB_NAME, DB_VERSION)
 
   request.onupgradeneeded = () => {
-    request.result.createObjectStore(STORE_NAME, { keyPath: 'authUser' })
+    request.result.createObjectStore(STORE_NAME_TRANSPORTER, { keyPath: 'authUser' })
+    request.result.createObjectStore(STORE_NAME_CONTACT, { keyPath: 'email' })
   }
 
   request.onsuccess = () => {
@@ -60,13 +63,80 @@ if (indexedDB) {
     if (dataList) drawTransporters(dataList, 1)
     if (dataLists) drawTransporters(dataLists)
     if (selectTransporter) drawSelectTransporter(selectTransporter)
+    if (contacts) drawContact()
   }
 
   request.onerror = error => console.log('error :>> ', error)
 
+  const drawContact = () => {
+    const transaction = db.transaction([STORE_NAME_CONTACT])
+    const objectStore = transaction.objectStore(STORE_NAME_CONTACT)
+
+    objectStore.getAll().onsuccess = event => {
+      const cursorValue = event.target.result
+      const data = Object.values(cursorValue)
+      if (cursorValue.length === 0) return
+
+      var tableName = 'contacts'
+      const createdCell = (cell, value, obj, row, col) => {
+        let original
+        if (col === 0) return
+        cell.setAttribute('contenteditable', true)
+        cell.setAttribute('spellcheck', false)
+
+        cell.addEventListener("focus", event => original = event.target.textContent)
+        cell.addEventListener("blur", event => {
+          if (original === event.target.textContent) return
+
+          const row = table.row(event.target.parentElement)
+
+          // get array of columns name
+          const columns = (table.settings().init().columns).map(obj => obj.data)
+          // get index of column edit
+          const idx = table.cell(event.target).index().column
+          const data = row.data()
+          const email = data.email
+          data[columns[idx]] = event.target.textContent
+
+          const transaction = db.transaction([STORE_NAME_CONTACT], 'readwrite')
+          const objectStore = transaction.objectStore(STORE_NAME_CONTACT)
+          const request = objectStore.get(email)
+
+          request.onsuccess = () => {
+            if (request.result !== undefined) {
+              objectStore.put(data)
+              toast(document.querySelector('.toast'), 'Se ha actualizado correctamente')
+            } else {
+              toast(document.querySelector('.toast'), 'Se ha producido un error al Actualizar')
+            }
+          }
+        })
+      }
+      var table = $('#'+tableName).DataTable({
+        data: data,
+        columns: [
+          { data: 'email' },
+          { data: 'name' },
+          { data: 'surname' }
+        ],
+        columnDefs: [{ 
+          targets: '_all',
+          createdCell: createdCell
+        }]
+      });
+      /*
+      table.rows.add([{
+        "email":       "TigerNixon",
+        "name":   "System Architect",
+        "surname":     "$3,120"
+      }]).draw();
+      */
+    }
+  }
+
   const drawTransporters = (parent, quantity = 999999) => {
-    const transaction = db.transaction([STORE_NAME])
-    const objectStore = transaction.objectStore(STORE_NAME)
+    const transaction = db.transaction([STORE_NAME_TRANSPORTER])
+    const objectStore = transaction.objectStore(STORE_NAME_TRANSPORTER)
 
     objectStore.getAll().onsuccess = event => {
       const cursorValue = event.target.result
@@ -130,8 +200,8 @@ if (indexedDB) {
   }
 
   const drawSelectTransporter = (parent) => {
-    const transaction = db.transaction([STORE_NAME])
-    const objectStore = transaction.objectStore(STORE_NAME)
+    const transaction = db.transaction([STORE_NAME_TRANSPORTER])
+    const objectStore = transaction.objectStore(STORE_NAME_TRANSPORTER)
 
     objectStore.getAll().onsuccess = event => {
       const cursorValue = event.target.result
@@ -166,14 +236,33 @@ document.addEventListener("DOMContentLoaded", () => {
   if (form) {
     form.addEventListener('submit', createTransporter, true)
   }
+  const formContact = document.querySelector('.form-contact')
+  if (formContact) {
+    formContact.addEventListener('submit', createContact, true)
+  }
 
 })
+
+const createContact = event => {
+  event.preventDefault()
+  const target = event.target
+  const data = {
+    email: target.email.value,
+    name: target.name.value,
+    surname: target.surname.value
+  }
+  console.log('data :>> ', data)
+  const transaction = db.transaction([STORE_NAME_CONTACT], 'readwrite')
+  const objectStore = transaction.objectStore(STORE_NAME_CONTACT)
+  const request = objectStore.add(data)
+  toast(document.querySelector('.toast'), 'Contacto creado correctamente')
+}
 
 const deleteTransporter = (card, event) => {
   event.preventDefault()
   const email = card.querySelector('.authUser input').value
-  const transaction = db.transaction([STORE_NAME], 'readwrite')
-  const objectStore = transaction.objectStore(STORE_NAME)
+  const transaction = db.transaction([STORE_NAME_TRANSPORTER], 'readwrite')
+  const objectStore = transaction.objectStore(STORE_NAME_TRANSPORTER)
   const request = objectStore.delete(email)
 
   request.onsuccess = () => {
@@ -188,8 +277,8 @@ const updateTransporter = (card, event) => {
   const email = card.querySelector('.authUser input').value
   
   event.target.setAttribute('disabled', true)
-  const transaction = db.transaction([STORE_NAME], 'readwrite')
-  const objectStore = transaction.objectStore(STORE_NAME)
+  const transaction = db.transaction([STORE_NAME_TRANSPORTER], 'readwrite')
+  const objectStore = transaction.objectStore(STORE_NAME_TRANSPORTER)
   const request = objectStore.get(email)
 
   request.onsuccess = () => {
@@ -222,8 +311,8 @@ const createTransporter = event => {
     secure: target.secure.checked
   }
   event.target.closest('form').reset()
-  const transaction = db.transaction([STORE_NAME], 'readwrite')
-  const objectStore = transaction.objectStore(STORE_NAME)
+  const transaction = db.transaction([STORE_NAME_TRANSPORTER], 'readwrite')
+  const objectStore = transaction.objectStore(STORE_NAME_TRANSPORTER)
   const request = objectStore.add(data)
   toast(document.querySelector('.toast'), 'Transporter creado correctamente')
 }
@@ -231,8 +320,8 @@ const sendEmail = event => {
   const target = event.target
   const selectedTransporter = document.querySelector('.js-select-transporter').value
   target.setAttribute('disabled', true)
-  const transaction = db.transaction([STORE_NAME])
-  const objectStore = transaction.objectStore(STORE_NAME)
+  const transaction = db.transaction([STORE_NAME_TRANSPORTER])
+  const objectStore = transaction.objectStore(STORE_NAME_TRANSPORTER)
   const request = objectStore.get(selectedTransporter) //TO-DO
   console.log('selectedTransporter :>> ', selectedTransporter);
 

@@ -12,6 +12,9 @@ app.get('/transporters/listar', (req, res) => {
 app.get('/transporters/crear', (req, res) => {
   res.render('transporters/crear')
 })
+app.get('/contacts/listar', (req, res) => {
+  res.render('contacts/listar')
+})
 
 app.get('/email', (req, res) => {
   res.render('email')
