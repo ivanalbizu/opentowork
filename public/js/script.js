@@ -78,9 +78,10 @@ if (indexedDB) {
       if (cursorValue.length === 0) return
 
       var tableName = 'contacts'
-      const createdCell = (cell, value, obj, row, col) => {
-        let original
+      const createdCell = (cell, value, data, row, col) => {
         if (col === 0) return
+
+        let original
         cell.setAttribute('contenteditable', true)
         cell.setAttribute('spellcheck', false)
 
@@ -88,19 +89,13 @@ if (indexedDB) {
         cell.addEventListener("blur", event => {
           if (original === event.target.textContent) return
 
-          const row = table.row(event.target.parentElement)
-
           // get array of columns name
           const columns = (table.settings().init().columns).map(obj => obj.data)
-          // get index of column edit
-          const idx = table.cell(event.target).index().column
-          const data = row.data()
-          const email = data.email
-          data[columns[idx]] = event.target.textContent
+          data[columns[col]] = event.target.textContent
 
           const transaction = db.transaction([STORE_NAME_CONTACT], 'readwrite')
           const objectStore = transaction.objectStore(STORE_NAME_CONTACT)
-          const request = objectStore.get(email)
+          const request = objectStore.get(data.email)
 
           request.onsuccess = () => {
             if (request.result !== undefined) {
