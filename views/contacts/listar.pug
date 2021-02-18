@@ -30,6 +30,7 @@ block content
             th Nombre
             th Apellidos
             th Empresa
+            th Cargo
             th Acciones
         tfoot
           tr
@@ -37,6 +38,7 @@ block content
             th Nombre
             th Apellidos
             th Empresa
+            th Cargo
             th Acciones
     .main__cards
       .card
@@ -62,6 +64,10 @@ block content
               label.label(for='enterprise')
                 span Empresa
                 input(type='text' id='enterprise' name='enterprise')
+            .input-field
+              label.label(for='position')
+                span Cargo
+                input(type='text' id='position' name='position')
             .input-field.button
               button.btn(type='submit') Crear nuevo
 

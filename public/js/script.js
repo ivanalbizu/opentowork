@@ -87,7 +87,6 @@ if (indexedDB) {
         cell.addEventListener('blur', event => {
           if (original === event.target.textContent) return
 
-          // get array of columns name
           const columns = (table.settings().init().columns).map(obj => obj.data)
           data[columns[col]] = event.target.textContent
 
@@ -96,12 +95,11 @@ if (indexedDB) {
           const request = objectStore.get(data.email)
 
           request.onsuccess = () => {
-            if (request.result !== undefined) {
-              objectStore.put(data)
-              toast(document.querySelector('.toast'), 'Se ha actualizado correctamente')
-            } else {
-              toast(document.querySelector('.toast'), 'Se ha producido un error al Actualizar')
-            }
+            objectStore.put(data)
+            toast(document.querySelector('.toast'), 'Se ha actualizado correctamente')
+          }
+          request.onerror = () => {
+            toast(document.querySelector('.toast'), 'Se ha producido un error al actualizar el contacto')
           }
         })
       }
@@ -117,6 +115,9 @@ if (indexedDB) {
             toast(document.querySelector('.toast'), 'Se ha eliminado correctamente')
             table.row(tr).remove().draw()
           }
+          request.onerror = () => {
+            toast(document.querySelector('.toast'), 'No se ha podido eliminar el contacto')
+          }
         })
       }
       const table = $('#contacts').DataTable({
@@ -126,6 +127,7 @@ if (indexedDB) {
           { data: 'name' },
           { data: 'surname' },
           { data: 'enterprise' },
+          { data: 'position' },
           {
             data: "delete",
             width: "80px",
@@ -133,7 +135,7 @@ if (indexedDB) {
           }
         ],
         columnDefs: [{ 
-          targets: [1, 2, 3],
+          targets: [1, 2, 3, 4],
           createdCell: editCell
         },
         {
@@ -264,6 +266,7 @@ const createContact = event => {
     name: target.name.value,
     surname: target.surname.value,
     enterprise: target.enterprise.value,
+    position: target.position.value,
     delete: "<button class='btn btn--danger btn--small' type='button'>Eliminar</button>"
   }
   console.log('data :>> ', data)

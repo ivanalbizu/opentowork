@@ -65,6 +65,16 @@ input[type="submit"], button {
   cursor: pointer;
 }
 
+:-webkit-autofill {
+  box-shadow: 0 0 0 50px #fff inset;
+  -webkit-text-fill-color: #000;
+}
+
+:-webkit-autofill:focus {
+  box-shadow: 0 0 0 50px #fff inset;
+  -webkit-text-fill-color: #000;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -871,7 +881,17 @@ a {
 .contacts {
   background-color: #fff;
   margin: 1.25em;
-  padding: 1em;
+  padding: 2em 1.5em;
+}
+
+.contacts table.dataTable.compact {
+  padding-top: 1.5em;
+}
+
+.contacts table.dataTable.compact thead th,
+.contacts table.dataTable.compact tfoot th {
+  text-align: left;
+  padding: 4px 17px;
 }
 
 .text-center {

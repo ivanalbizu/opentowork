@@ -55,7 +55,14 @@ input, button, textarea, select {
 input[type="submit"], button {
   cursor: pointer;
 }
-
+:-webkit-autofill {
+  box-shadow: 0 0 0 50px #fff inset;
+  -webkit-text-fill-color: #000;
+  &:focus {
+    box-shadow: 0 0 0 50px #fff inset;
+    -webkit-text-fill-color: #000;
+  }  
+}
 
 // Sass tils
 $color-fiord: #394263; // sidenav bg & dark text
@@ -888,7 +895,16 @@ a {
 .contacts {
   background-color: #fff;
   margin: 1.25em;
-  padding: 1em;
+  padding: 2em 1.5em;
+  table.dataTable.compact {
+    padding-top: 1.5em;
+    thead th,
+    tfoot th {
+      text-align: left;
+      padding: 4px 17px;
+    }
+  }
+  
 }
 .text-center {
   text-align: center;
