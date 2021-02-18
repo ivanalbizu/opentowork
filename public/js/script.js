@@ -96,6 +96,7 @@ if (indexedDB) {
 
           request.onsuccess = () => {
             objectStore.put(data)
+            table.row(row).data(data).draw(true)
             toast(document.querySelector('.toast'), 'Se ha actualizado correctamente')
           }
           request.onerror = () => {
