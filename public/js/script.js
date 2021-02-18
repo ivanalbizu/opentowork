@@ -75,18 +75,16 @@ if (indexedDB) {
     objectStore.getAll().onsuccess = event => {
       const cursorValue = event.target.result
       const data = Object.values(cursorValue)
-      if (cursorValue.length === 0) return
 
-      var tableName = 'contacts'
-      const createdCell = (cell, value, data, row, col) => {
-        if (col === 0) return
+      const editCell = (cell, value, data, row, col) => {
+        if (col === 0 || value === 'Actions') return
 
         let original
         cell.setAttribute('contenteditable', true)
         cell.setAttribute('spellcheck', false)
 
-        cell.addEventListener("focus", event => original = event.target.textContent)
-        cell.addEventListener("blur", event => {
+        cell.addEventListener('focus', event => original = event.target.textContent)
+        cell.addEventListener('blur', event => {
           if (original === event.target.textContent) return
 
           // get array of columns name
@@ -107,25 +105,45 @@ if (indexedDB) {
           }
         })
       }
-      var table = $('#'+tableName).DataTable({
+      const deleteRow = cell => {
+        cell.addEventListener("click", () => {
+          const tr = cell.closest('tr')
+          const email = tr.querySelector('td:first-child').textContent
+          const transaction = db.transaction([STORE_NAME_CONTACT], 'readwrite')
+          const objectStore = transaction.objectStore(STORE_NAME_CONTACT)
+          const request = objectStore.delete(email)
+
+          request.onsuccess = () => {
+            toast(document.querySelector('.toast'), 'Se ha eliminado correctamente')
+            table.row(tr).remove().draw()
+          }
+        })
+      }
+      const table = $('#contacts').DataTable({
         data: data,
         columns: [
           { data: 'email' },
           { data: 'name' },
-          { data: 'surname' }
+          { data: 'surname' },
+          { data: 'enterprise' },
+          {
+            data: "delete",
+            width: "80px",
+            className: "text-center"
+          }
         ],
         columnDefs: [{ 
-          targets: '_all',
-          createdCell: createdCell
+          targets: [1, 2, 3],
+          createdCell: editCell
+        },
+        {
+          targets: -1,
+          searchable: false,
+          orderable: false,
+          createdCell: deleteRow
         }]
-      });
-      /*
-      table.rows.add([{
-        "email":       "TigerNixon",
-        "name":   "System Architect",
-        "surname":     "$3,120"
-      }]).draw();
-      */
+      })
+
     }
   }
 
@@ -244,7 +262,9 @@ const createContact = event => {
   const data = {
     email: target.email.value,
     name: target.name.value,
-    surname: target.surname.value
+    surname: target.surname.value,
+    enterprise: target.enterprise.value,
+    delete: "<button class='btn btn--danger btn--small' type='button'>Eliminar</button>"
   }
   console.log('data :>> ', data)
   const transaction = db.transaction([STORE_NAME_CONTACT], 'readwrite')

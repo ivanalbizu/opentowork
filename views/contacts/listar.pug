@@ -29,11 +29,15 @@ block content
             th Email
             th Nombre
             th Apellidos
+            th Empresa
+            th Acciones
         tfoot
           tr
             th Email
             th Nombre
             th Apellidos
+            th Empresa
+            th Acciones
     .main__cards
       .card
         .card__header
@@ -54,6 +58,10 @@ block content
               label.label(for='surname')
                 span Apellidos
                 input(type='text' id='surname' name='surname' value='Santos')
+            .input-field
+              label.label(for='enterprise')
+                span Empresa
+                input(type='text' id='enterprise' name='enterprise')
             .input-field.button
               button.btn(type='submit') Crear nuevo
 

@@ -829,6 +829,10 @@ a {
   background-color: #a85913;
 }
 
+.btn--small {
+  padding: .2em .8em;
+}
+
 @keyframes translateY {
   0% {
     opacity: 0;
@@ -868,4 +872,8 @@ a {
   background-color: #fff;
   margin: 1.25em;
   padding: 1em;
+}
+
+.text-center {
+  text-align: center;
 }

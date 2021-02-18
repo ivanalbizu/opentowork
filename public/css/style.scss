@@ -847,6 +847,9 @@ a {
       background-color: darken($color-zest, 15%);
     }
   }
+  &--small {
+    padding: .2em .8em;
+  }
   transition: background .3s ease;
 }
 @keyframes translateY {
@@ -886,4 +889,7 @@ a {
   background-color: #fff;
   margin: 1.25em;
   padding: 1em;
+}
+.text-center {
+  text-align: center;
 }
