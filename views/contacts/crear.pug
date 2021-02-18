@@ -1,0 +1,45 @@
+extends ../base
+
+block content
+
+  // header
+  include ../includes/header.pug
+
+  // aside menu
+  include ../includes/aside-sidenav.pug
+  main.main
+    h2.title-page Crea tus contactos
+
+    .main__cards
+      .card
+        .card__header
+          .card__header-title.text-light
+            | Crear 
+            strong nuevo Contacto 
+        .card__main
+          form.form.form-contact
+            .input-field.host
+              label.label(for='email') 
+                span Email
+                input(type='text' id='email' name='email' value='yourmail@yahoo.com')
+            .input-field.port
+              label.label(for='name')
+                span Nombre
+                input(type='text' id='name' name='name' value='Claudia')
+            .input-field.service
+              label.label(for='surname')
+                span Apellidos
+                input(type='text' id='surname' name='surname' value='Santos')
+            .input-field
+              label.label(for='enterprise')
+                span Empresa
+                input(type='text' id='enterprise' name='enterprise')
+            .input-field
+              label.label(for='position')
+                span Cargo
+                input(type='text' id='position' name='position')
+            .input-field.button
+              button.btn(type='submit') Crear nuevo
+
+  // footer
+  include ../includes/footer.pug
