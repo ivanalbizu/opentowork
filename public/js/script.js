@@ -1,14 +1,10 @@
-const indexedDB = window.indexedDB
-const dataList = document.querySelector('.data-list')
-const dataLists = document.querySelector('.data-lists')
-const selectTransporter = document.querySelector('.js-select-transporter')
-const contacts = document.querySelector('#contacts')
-
-let db
-const DB_NAME = 'nodemailer'
-const DB_VERSION = 1
-const STORE_NAME_TRANSPORTER = 'transporter'
-const STORE_NAME_CONTACT = 'contact'
+const toggleClass = (el, className) => {
+  if (el.classList.contains(className)) {
+    el.classList.remove(className)
+  } else {
+    el.classList.add(className)
+  }
+}
 
 const elFactory = (type, attributes, ...children) => {
   const el = document.createElement(type)
@@ -49,6 +45,44 @@ const inputType = text => {
   }
   return type
 }
+
+const postData = async (url = '', data = {}) => {
+  const response = await fetch(url, {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify(data)
+  })
+  return await response.json()
+}
+
+const toast = (el, msg) => {
+  el.textContent = msg
+  el.classList.add('toast--active')
+  el.addEventListener("animationend", () => el.classList.remove('toast--active'), false)
+}
+
+const getSiblings = elem => {
+	return Array.prototype.filter.call(elem.parentNode.children, sibling => {
+		return sibling !== elem
+	})
+}
+
+
+const indexedDB = window.indexedDB
+const dataList = document.querySelector('.data-list')
+const dataLists = document.querySelector('.data-lists')
+const selectTransporter = document.querySelector('.js-select-transporter')
+const contacts = document.querySelector('#contacts')
+
+let db
+const DB_NAME = 'nodemailer'
+const DB_VERSION = 1
+const STORE_NAME_TRANSPORTER = 'transporter'
+const STORE_NAME_CONTACT = 'contact'
 
 if (indexedDB) {
   const request = indexedDB.open(DB_NAME, DB_VERSION)
@@ -369,34 +403,13 @@ const sendEmail = event => {
   }
 }
 
-const postData = async (url = '', data = {}) => {
-  const response = await fetch(url, {
-    method: 'POST',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    referrerPolicy: 'no-referrer',
-    body: JSON.stringify(data)
-  })
-  return await response.json()
-}
-const toast = (el, msg) => {
-  el.textContent = msg
-  el.classList.add('toast--active')
-  el.addEventListener("animationend", () => el.classList.remove('toast--active'), false)
-}
+
 // Set constants and grab needed elements
 const sidenavEl = document.querySelector('.sidenav')
 const gridEl = document.querySelector('.grid')
 const SIDENAV_ACTIVE_CLASS = 'sidenav--active'
 const GRID_NO_SCROLL_CLASS = 'grid--noscroll'
 
-const getSiblings = elem => {
-	return Array.prototype.filter.call(elem.parentNode.children, sibling => {
-		return sibling !== elem
-	})
-}
 
 // User avatar dropdown functionality
 const setUserDropdownListener = () => {
@@ -430,15 +443,6 @@ const setSidenavListeners = () => {
 
     })
   })
-}
-
-
-const toggleClass = (el, className) => {
-  if (el.classList.contains(className)) {
-    el.classList.remove(className)
-  } else {
-    el.classList.add(className)
-  }
 }
 
 const addResizeListeners = () => {
