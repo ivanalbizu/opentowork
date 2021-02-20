@@ -73,8 +73,8 @@ const getSiblings = elem => {
 
 
 const indexedDB = window.indexedDB
-const dataList = document.querySelector('.data-list')
-const dataLists = document.querySelector('.data-lists')
+const transporterList = document.querySelector('.transporter-list')
+const transporterLists = document.querySelector('.transporter-lists')
 const selectTransporter = document.querySelector('.js-select-transporter')
 const contacts = document.querySelector('#contacts')
 const contactsDatalist = document.querySelector('#contacts-datalist')
@@ -95,8 +95,8 @@ if (indexedDB) {
 
   request.onsuccess = () => {
     db = request.result
-    if (dataList) drawTransporters(dataList, 1)
-    if (dataLists) drawTransporters(dataLists)
+    if (transporterList) drawTransporters(transporterList, 1)
+    if (transporterLists) drawTransporters(transporterLists)
     if (selectTransporter) drawTransportersSelect(selectTransporter)
     if (contacts) drawContacts()
     if (contactsDatalist) drawContactsDatalist(contactsDatalist)
@@ -264,7 +264,7 @@ if (indexedDB) {
       for (let index = 0; index < cursorValue.length; index++) {
         const field = cursorValue[index]
         const option = elFactory(
-          'option', { value: `${field.email}` }, field.name
+          'option', { value: `${field.email}` }, `${field.name} ${field.surname}`
         )
         fragment.appendChild(option)
       }
