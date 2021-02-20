@@ -20,9 +20,10 @@ block content
               label.label(for='transporter') Transporter
               select.js-select-transporter(name='transporter')
             .input-field
-              label.label(for='addressee') 
-                span Destinatario
-                input(type='text' id='addressee' name='addressee' placeholder='Email del destinatario')
+              label.label(for='addressee')
+                span Contacto
+                input(list='contacts-datalist' name='addressee' id='addressee' placeholder='Email del destinatario')
+              datalist#contacts-datalist
             .input-field
               label.label(for='subject') 
                 span Asunto

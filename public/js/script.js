@@ -77,6 +77,7 @@ const dataList = document.querySelector('.data-list')
 const dataLists = document.querySelector('.data-lists')
 const selectTransporter = document.querySelector('.js-select-transporter')
 const contacts = document.querySelector('#contacts')
+const contactsDatalist = document.querySelector('#contacts-datalist')
 
 let db
 const DB_NAME = 'nodemailer'
@@ -96,13 +97,14 @@ if (indexedDB) {
     db = request.result
     if (dataList) drawTransporters(dataList, 1)
     if (dataLists) drawTransporters(dataLists)
-    if (selectTransporter) drawSelectTransporter(selectTransporter)
-    if (contacts) drawContact()
+    if (selectTransporter) drawTransportersSelect(selectTransporter)
+    if (contacts) drawContacts()
+    if (contactsDatalist) drawContactsDatalist(contactsDatalist)
   }
 
   request.onerror = error => console.log('error :>> ', error)
 
-  const drawContact = () => {
+  const drawContacts = () => {
     const transaction = db.transaction([STORE_NAME_CONTACT])
     const objectStore = transaction.objectStore(STORE_NAME_CONTACT)
 
@@ -249,7 +251,28 @@ if (indexedDB) {
     }
   }
 
-  const drawSelectTransporter = (parent) => {
+  const drawContactsDatalist = (parent) => {
+    const transaction = db.transaction([STORE_NAME_CONTACT])
+    const objectStore = transaction.objectStore(STORE_NAME_CONTACT)
+
+    objectStore.getAll().onsuccess = event => {
+      const cursorValue = event.target.result
+      if (cursorValue.length === 0) return
+
+      const fragment = new DocumentFragment()
+
+      for (let index = 0; index < cursorValue.length; index++) {
+        const field = cursorValue[index]
+        const option = elFactory(
+          'option', { value: `${field.email}` }, field.name
+        )
+        fragment.appendChild(option)
+      }
+      parent.appendChild(fragment)
+    }
+  }
+
+  const drawTransportersSelect = (parent) => {
     const transaction = db.transaction([STORE_NAME_TRANSPORTER])
     const objectStore = transaction.objectStore(STORE_NAME_TRANSPORTER)
 
