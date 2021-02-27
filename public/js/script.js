@@ -212,6 +212,19 @@ if (indexedDB) {
     })
   }
 
+  const deleteHtml = event => {
+    event.preventDefault()
+    const id = event.target.id
+    const transaction = db.transaction([STORE_NAME_GJS], 'readwrite')
+    const objectStore = transaction.objectStore(STORE_NAME_GJS)
+    const request = objectStore.delete(id)
+  
+    request.onsuccess = () => {
+      toast(document.querySelector('.toast'), 'Se ha eliminado correctamente')
+      event.target.closest('li').remove()
+    }
+  }
+
   const drawHtmlDatalist = (parent) => {
     const transaction = db.transaction([STORE_NAME_GJS])
     const objectStore = transaction.objectStore(STORE_NAME_GJS)
@@ -228,13 +241,10 @@ if (indexedDB) {
           'li', { class: 'template-item', id: `${field.id}` },
           elFactory('span', {}, `${field.id}`),
           elFactory('a', { class: 'btn btn--small', href: `/html-builder/${field.id}` }, 'editar'),
-          elFactory('button', { type: 'submit', class: 'btn btn--danger btn--small js-delete-template' }, `Eliminar`)
+          elFactory('button', { type: 'submit', id: `${field.id}`, class: 'btn btn--danger btn--small js-delete-template' }, `Eliminar`)
         )
         fragment.appendChild(li)
-        li.querySelector('.js-delete-template').addEventListener('click', event => {
-          // TO-DO delete indexedDB item
-          console.log('event.target :>> ', event.target);
-        }, true)
+        li.querySelector('.js-delete-template').addEventListener('click', deleteHtml, true)
       }
       parent.appendChild(fragment)
     }
