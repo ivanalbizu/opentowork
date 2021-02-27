@@ -24,7 +24,9 @@ app.get('/html-builder', (req, res) => {
 app.get('/html-builder/:id', (req, res) => {
   const id = req.params.id
   console.log('id :>> ', id);
-  res.render('mjml/html-builder-template-ID')
+  res.render('mjml/html-builder-template-ID', {
+    id
+  })
 })
 
 app.get('/email', (req, res) => {

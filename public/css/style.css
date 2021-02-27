@@ -840,7 +840,21 @@ a {
 }
 
 .btn--small {
+  font-size: .8em;
   padding: .2em .8em;
+}
+
+.html-templates li {
+  margin-bottom: .6em;
+}
+
+.template-item {
+  display: flex;
+  gap: .4em;
+}
+
+.template-item span {
+  margin-right: auto;
 }
 
 @keyframes translateY {

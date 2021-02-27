@@ -1,4 +1,4 @@
-const id = 'other-id-1'
+const id = typeof templateID !== 'undefined' ? templateID : 'other-id-1'
 
 let db_gjs
 const DB_NAME_GJS = 'grapesjs'
@@ -10,7 +10,6 @@ const selectTemplate = () => {
 
 }
 if (indexedDB) {
-  console.log('existe');
   const request = indexedDB.open(DB_NAME_GJS, DB_VERSION_GJS)
 
   request.onupgradeneeded = () => {
@@ -30,23 +29,23 @@ if (indexedDB) {
       const cursorValue = event.target.result
       if (cursorValue.length === 0) return
 
-      console.log('cursorValue :>> ', cursorValue);
       const fragment = new DocumentFragment()
 
       for (let index = 0; index < cursorValue.length; index++) {
         const field = cursorValue[index]
-        console.log('field :>> ', field);
         const li = elFactory(
-          'li', { id: `${field.id}` },
-          elFactory('a', { href: `/html-builder/${field.id}` }, `${field.id}`)
+          'li', { class: 'template-item', id: `${field.id}` },
+          elFactory('span', {}, `${field.id}`),
+          elFactory('a', { class: 'btn btn--small', href: `/html-builder/${field.id}` }, 'editar'),
+          elFactory('button', { type: 'submit', class: 'btn btn--danger btn--small js-delete-template' }, `Eliminar`)
         )
         fragment.appendChild(li)
+        li.querySelector('.js-delete-template').addEventListener('click', event => {
+          // TO-DO delete indexedDB item
+          console.log('event.target :>> ', event.target);
+        }, true)
       }
       parent.appendChild(fragment)
-      parent.addEventListener('click', event => {
-        console.log('event.target :>> ', event.target);
-
-      }, true)
     }
   }
 

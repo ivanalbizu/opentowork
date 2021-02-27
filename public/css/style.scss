@@ -855,9 +855,22 @@ a {
     }
   }
   &--small {
+    font-size: .8em;
     padding: .2em .8em;
   }
   transition: background .3s ease;
+}
+.html-templates {
+  li {
+    margin-bottom: .6em;
+  }
+}
+.template-item {
+  display: flex;
+  gap: .4em;
+  span {
+    margin-right: auto;
+  }
 }
 @keyframes translateY {
   0% {

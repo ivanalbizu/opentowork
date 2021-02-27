@@ -15,9 +15,20 @@ block content
     .main__cards
       .card
         .card__header
-          .card__header-title.text-light Html 
+          .card__header-title.text-light Templates 
         .card__main
-          ul#html-templates
+          ul#html-templates.html-templates
+      .card
+        .card__header
+          .card__header-title.text-light Crear Template 
+        .card__main
+          form.form
+            .input-field
+              label.label(for='name') 
+                span Nombre
+                input(type='text' id='name' name='name' autocomplete='off')
+            .input-field.button
+              button.btn(type='submit') Crear template
     <div id="gjs">
       <mjml>
         <mj-body>

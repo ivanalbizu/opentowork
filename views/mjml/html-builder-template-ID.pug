@@ -4,6 +4,8 @@ block content
 
   // header
   include ../includes/header.pug
+  script.
+    const templateID = !{JSON.stringify(id)}
   link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/grapesjs/0.16.41/css/grapes.min.css')
   script(src="https://cdnjs.cloudflare.com/ajax/libs/grapesjs/0.16.41/grapes.min.js")
   script(src='https://unpkg.com/grapesjs-mjml@0.1.15/dist/grapesjs-mjml.min.js')
