@@ -18,6 +18,14 @@ app.get('/contacts/listar', (req, res) => {
 app.get('/contacts/crear', (req, res) => {
   res.render('contacts/crear')
 })
+app.get('/html-builder', (req, res) => {
+  res.render('mjml/html-builder')
+})
+app.get('/html-builder/:id', (req, res) => {
+  const id = req.params.id
+  console.log('id :>> ', id);
+  res.render('mjml/html-builder-template-ID')
+})
 
 app.get('/email', (req, res) => {
   res.render('email')
