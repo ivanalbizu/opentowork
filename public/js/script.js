@@ -80,6 +80,7 @@ const contacts = document.querySelector('#contacts')
 const contactsDatalist = document.querySelector('#contacts-datalist')
 const htmlTemplates = document.querySelector('#html-templates')
 const gjs = document.querySelector('#gjs')
+const emailSelect = document.querySelector('#email-select')
 let idsTemplates = []
 
 let db
@@ -106,6 +107,7 @@ if (indexedDB) {
     if (contacts) drawContacts()
     if (contactsDatalist) drawContactsDatalist(contactsDatalist)
     if (htmlTemplates) drawHtmlDatalist(htmlTemplates)
+    if (emailSelect) drawEmailPreview(emailSelect)
     if (gjs) initGJS()
   }
 
@@ -255,6 +257,40 @@ if (indexedDB) {
         li.querySelector('.js-delete-template').addEventListener('click', deleteHtml, true)
       }
       parent.appendChild(fragment)
+    }
+  }
+
+  const drawEmailPreview = (parent) => {
+    const transaction = db.transaction([STORE_NAME_GJS])
+    const objectStore = transaction.objectStore(STORE_NAME_GJS)
+
+    objectStore.getAll().onsuccess = event => {
+      const cursorValue = event.target.result
+      if (cursorValue.length === 0) return
+      
+      for (const iterator of cursorValue) idsTemplates.push(iterator.id)
+      const fragment = new DocumentFragment()
+
+      for (let index = 0; index < cursorValue.length; index++) {
+        const field = cursorValue[index]
+        if (index === 0) {
+          const option = elFactory(
+            'option', { value: '', disabled: 'disabled', selected: 'true' }, 'Elige un template'
+          )
+          fragment.appendChild(option)
+        }
+        const option = elFactory(
+          'option', { value: `${field.id}` }, `${field.id}`
+        )
+        fragment.appendChild(option)
+      }
+      parent.appendChild(fragment)
+      parent.addEventListener('change', event => {
+        const target = event.target.value
+        const index = parent.selectedIndex-1
+        const html = cursorValue[index][`${target}plainHTML`]
+        document.querySelector('#html').innerHTML = html
+      }, true)
     }
   }
 
