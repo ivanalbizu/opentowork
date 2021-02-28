@@ -80,6 +80,7 @@ const contacts = document.querySelector('#contacts')
 const contactsDatalist = document.querySelector('#contacts-datalist')
 const htmlTemplates = document.querySelector('#html-templates')
 const gjs = document.querySelector('#gjs')
+let idsTemplates = []
 
 let db
 const DB_NAME = 'nodemailer'
@@ -221,6 +222,7 @@ if (indexedDB) {
   
     request.onsuccess = () => {
       toast(document.querySelector('.toast'), 'Se ha eliminado correctamente')
+      idsTemplates = idsTemplates.filter(e => e !== id)
       event.target.closest('li').remove()
     }
   }
@@ -232,7 +234,8 @@ if (indexedDB) {
     objectStore.getAll().onsuccess = event => {
       const cursorValue = event.target.result
       if (cursorValue.length === 0) return
-
+      
+      for (const iterator of cursorValue) idsTemplates.push(iterator.id)
       const fragment = new DocumentFragment()
 
       for (let index = 0; index < cursorValue.length; index++) {
@@ -377,8 +380,20 @@ document.addEventListener("DOMContentLoaded", () => {
   if (formContact) {
     formContact.addEventListener('submit', createContact, true)
   }
+  const createTemplate = document.querySelector('#create-template')
+  const createTemplateBtn = document.querySelector('.js-create-template')
+  if (createTemplate) {
+    createTemplate.addEventListener('input', checkExistHtmlTemplate.bind(null, createTemplateBtn), true)
+  }
 
 })
+
+const checkExistHtmlTemplate = (createTemplateBtn, event) => {
+  const templateName = event.target.value
+  const exist = idsTemplates.includes(templateName)
+  if (exist || templateName === '') createTemplateBtn.setAttribute('href', '#!')
+  else createTemplateBtn.setAttribute('href', `/html-builder/${templateName}`)
+}
 
 const createContact = event => {
   event.preventDefault()
@@ -463,7 +478,7 @@ const sendEmail = event => {
   const transaction = db.transaction([STORE_NAME_TRANSPORTER])
   const objectStore = transaction.objectStore(STORE_NAME_TRANSPORTER)
   const request = objectStore.get(selectedTransporter) //TO-DO
-  console.log('selectedTransporter :>> ', selectedTransporter);
+  console.log('selectedTransporter :>> ', selectedTransporter)
 
   const addressee = document.querySelector('[name="addressee"]').value
   const subject = document.querySelector('[name="subject"]').value

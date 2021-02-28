@@ -22,13 +22,12 @@ block content
         .card__header
           .card__header-title.text-light Crear Template 
         .card__main
-          form.form
-            .input-field
-              label.label(for='name') 
-                span Nombre
-                input(type='text' id='name' name='name' autocomplete='off')
-            .input-field.button
-              button.btn(type='submit') Crear template
+          .input-field
+            label.label(for='create-template') 
+              span Nombre
+              input(type='text' id='create-template' name='create-template' autocomplete='off')
+          .input-field.button
+            a.btn(class='js-create-template' href='#!') Crear template
 
   // footer
   include ../includes/footer.pug

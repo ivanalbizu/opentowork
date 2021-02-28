@@ -63,6 +63,11 @@ input[type="submit"], button {
     -webkit-text-fill-color: #000;
   }  
 }
+[disabled],
+[href='#!'] {
+  opacity: .5;
+  cursor: not-allowed;
+}
 
 // Sass tils
 $color-fiord: #394263; // sidenav bg & dark text
@@ -835,7 +840,9 @@ a {
 }
 
 .btn {
+  display: inline-flex;
   background-color: $color-fiord;
+  font-size: 1em;
   color: #fff;
   border: 0;
   padding: .8em 1.5em;

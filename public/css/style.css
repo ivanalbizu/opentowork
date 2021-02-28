@@ -75,6 +75,12 @@ input[type="submit"], button {
   -webkit-text-fill-color: #000;
 }
 
+[disabled],
+[href='#!'] {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -815,7 +821,9 @@ a {
 }
 
 .btn {
+  display: inline-flex;
   background-color: #394263;
+  font-size: 1em;
   color: #fff;
   border: 0;
   padding: .8em 1.5em;
