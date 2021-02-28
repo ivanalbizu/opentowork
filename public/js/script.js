@@ -207,8 +207,13 @@ if (indexedDB) {
         'grapesjs-mjml': {},
         'grapesjs-indexeddb': {
           dbName: DB_NAME,
-          objectStoreName: 'templates'
+          objectStoreName: STORE_NAME_GJS
         }
+      }
+    })
+    editor.on('storage:start:store', objectToStore => {
+      if (editor.getConfig().plugins.includes('grapesjs-mjml')) {
+        objectToStore.plainHTML = editor.runCommand('mjml-get-code').html
       }
     })
   }
