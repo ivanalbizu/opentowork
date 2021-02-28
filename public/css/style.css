@@ -822,6 +822,7 @@ a {
 
 .btn {
   display: inline-flex;
+  align-items: center;
   background-color: #394263;
   font-size: 1em;
   color: #fff;
