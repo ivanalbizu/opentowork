@@ -29,7 +29,7 @@ block content
                 label.label(for='subject') 
                   span Asunto
                   input(type='text' id='subject' name='subject' placeholder='Asunto del correo')
-              .input-field
+              .input-field(style='visibility:hidden;display:none;')
                 textarea.textarea(name='html' rows='10' cols='50' placeholder='Escriba aquí el cuerpo del correo')
               .input-field.button
                 button.btn.js-send-email(type='button') Enviar email
@@ -37,8 +37,7 @@ block content
               .input-field
                 label.label Cuerpo del email
                 select#email-select
-                #html
-                  div(contenteditable='true') Vista del email
+                iframe#html(width='100%' contenteditable='true')
 
   // footer
   include includes/footer.pug

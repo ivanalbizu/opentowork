@@ -925,7 +925,12 @@ a {
       padding: 4px 17px;
     }
   }
-  
+}
+
+iframe#html {
+  border: 0;
+  height: 50px;
+  margin-top: 1em;
 }
 .text-center {
   text-align: center;

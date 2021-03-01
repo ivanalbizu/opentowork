@@ -285,11 +285,19 @@ if (indexedDB) {
         fragment.appendChild(option)
       }
       parent.appendChild(fragment)
+      const iframe = document.querySelector('#html')
+      const iDoc = iframe.contentWindow.document
+
       parent.addEventListener('change', event => {
+        iDoc.open('text/html', 'replace')
+        iframe.style.height = '500px'
         const target = event.target.value
         const index = parent.selectedIndex-1
         const html = cursorValue[index][`${target}plainHTML`]
-        document.querySelector('#html > div').innerHTML = html
+
+        iDoc.write(html)
+        iDoc.close()
+        iDoc.body.contentEditable = true
       }, true)
     }
   }
@@ -518,18 +526,18 @@ const sendEmail = event => {
   target.setAttribute('disabled', true)
   const transaction = db.transaction([STORE_NAME_TRANSPORTER])
   const objectStore = transaction.objectStore(STORE_NAME_TRANSPORTER)
-  const request = objectStore.get(selectedTransporter) //TO-DO
-  console.log('selectedTransporter :>> ', selectedTransporter)
+  const request = objectStore.get(selectedTransporter)
 
   const addressee = document.querySelector('[name="addressee"]').value
   const subject = document.querySelector('[name="subject"]').value
-  const html = document.querySelector('[name="html"]').value
+  const html = (document.querySelector('#html').contentWindow.document.documentElement).outerHTML;
+
   target.closest('form').reset()
   request.onsuccess = async () => {
     if (request.result !== undefined) {
       let response
       try {
-        const data = { ...request.result, ...{html, subject, addressee} }
+        const data = { ...request.result, ...{ html, subject, addressee } }
         response = await postData('email', data)
         if (response.error) toast(document.querySelector('.toast'), 'Error enviando el email')
         else toast(document.querySelector('.toast'), 'Email enviado correctamente')
@@ -538,7 +546,6 @@ const sendEmail = event => {
         toast(document.querySelector('.toast'), `Error en el envío: ${error}`)
         console.error(error)
       }
-      console.log(response)
     } else {
       toast(document.querySelector('.toast'), 'No tienes ningún Transporter para hacer envío de Emails')
       console.log('No find results')
