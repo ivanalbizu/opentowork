@@ -447,10 +447,10 @@ const createContact = event => {
     position: target.position.value,
     delete: "<button class='btn btn--danger btn--small' type='button'>Eliminar</button>"
   }
-  console.log('data :>> ', data)
   const transaction = db.transaction([STORE_NAME_CONTACT], 'readwrite')
   const objectStore = transaction.objectStore(STORE_NAME_CONTACT)
   const request = objectStore.add(data)
+  target.closest('form').reset()
   toast(document.querySelector('.toast'), 'Contacto creado correctamente')
 }
 
