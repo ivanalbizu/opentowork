@@ -15,27 +15,30 @@ block content
           .card__header-title.text-light 
             strong Envia un email 
         .card__main
-          form
-            .input-field
-              label.label(for='transporter') Transporter
-              select.js-select-transporter(name='transporter')
-            .input-field
-              label.label(for='addressee')
-                span Contacto
-                input(list='contacts-datalist' name='addressee' id='addressee' placeholder='Email del destinatario')
-              datalist#contacts-datalist
-            .input-field
-              label.label(for='subject') 
-                span Asunto
-                input(type='text' id='subject' name='subject' placeholder='Asunto del correo')
-            .input-field
-              textarea.textarea(name='html' rows='10' cols='50' placeholder='Escriba aquí el cuerpo del correo')
-            .input-field
-              label.label Email
-              select#email-select
-              #html Vista del email
-            .input-field.button
-              button.btn.js-send-email(type='button') Enviar email
+          form.form
+            div
+              .input-field
+                label.label(for='transporter') Transporter
+                select.js-select-transporter(name='transporter')
+              .input-field
+                label.label(for='addressee')
+                  span Contacto
+                  input(list='contacts-datalist' name='addressee' id='addressee' placeholder='Email del destinatario')
+                datalist#contacts-datalist
+              .input-field
+                label.label(for='subject') 
+                  span Asunto
+                  input(type='text' id='subject' name='subject' placeholder='Asunto del correo')
+              .input-field
+                textarea.textarea(name='html' rows='10' cols='50' placeholder='Escriba aquí el cuerpo del correo')
+              .input-field.button
+                button.btn.js-send-email(type='button') Enviar email
+            div
+              .input-field
+                label.label Cuerpo del email
+                select#email-select
+                #html
+                  div(contenteditable='true') Vista del email
 
   // footer
   include includes/footer.pug

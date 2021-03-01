@@ -289,7 +289,7 @@ if (indexedDB) {
         const target = event.target.value
         const index = parent.selectedIndex-1
         const html = cursorValue[index][`${target}plainHTML`]
-        document.querySelector('#html').innerHTML = html
+        document.querySelector('#html > div').innerHTML = html
       }, true)
     }
   }
