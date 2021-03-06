@@ -198,13 +198,14 @@ if (indexedDB) {
   const initGJS = () => {
     const id = typeof templateID !== 'undefined' ? templateID : 'other-id-1'
     const editor = grapesjs.init({
-      fromElement: 1,
       container : '#gjs',
+      avoidInlineStyle: false,
+      fromElement: true,
       storageManager: {
         type: 'indexeddb',
         id: id,
       },
-      plugins: ['grapesjs-mjml', 'grapesjs-indexeddb'],
+      plugins: ['grapesjs-indexeddb', 'grapesjs-mjml'],
       pluginsOpts: {
         'grapesjs-mjml': {},
         'grapesjs-indexeddb': {
