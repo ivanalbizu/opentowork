@@ -81,7 +81,6 @@ $color-mine-shaft: #333; // main section header bg
 $color-zest: #e67e22; // document icon bg
 $color-jungle-green: #27ae60; // calendar icon bg
 $color-cinnabar: #e74c3c; // main icon bg, red
-$color-amethyst: #af64cc; // main photo icon bg
 $color-transparent: rgba(255, 255, 255, .5);
 $color-alto: #D3D3D3;
 
@@ -589,10 +588,6 @@ a {
 
     &--mail {
       background-color: $color-cinnabar;
-    }
-
-    &--photo {
-      background-color: $color-amethyst;
     }
   }
 

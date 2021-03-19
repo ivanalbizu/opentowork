@@ -575,10 +575,6 @@ a {
   background-color: #e74c3c;
 }
 
-.overviewCard-icon--photo {
-  background-color: #af64cc;
-}
-
 .overviewCard-description {
   display: flex;
   flex-direction: column;
