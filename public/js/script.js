@@ -81,6 +81,7 @@ const contactsDatalist = document.querySelector('#contacts-datalist')
 const htmlTemplates = document.querySelector('#html-templates')
 const gjs = document.querySelector('#gjs')
 const emailSelect = document.querySelector('#email-select')
+const quickview = document.querySelector('.quickview')
 let idsTemplates = []
 
 let db
@@ -108,10 +109,35 @@ if (indexedDB) {
     if (contactsDatalist) drawContactsDatalist(contactsDatalist)
     if (htmlTemplates) drawHtmlDatalist(htmlTemplates)
     if (emailSelect) drawEmailPreview(emailSelect)
+    if (quickview) counterDatabase()
     if (gjs) initGJS()
   }
 
   request.onerror = error => console.log('error :>> ', error)
+
+  const counterDatabase = () => {
+    const transactionContact = db.transaction([STORE_NAME_CONTACT])
+    const objectStoreContact = transactionContact.objectStore(STORE_NAME_CONTACT)
+    var countRequestContact = objectStoreContact.count()
+    countRequestContact.onsuccess = () => {
+      document.querySelector('.js-contact-number').innerHTML = countRequestContact.result || '0'
+    }
+    
+    const transactionTemplate = db.transaction([STORE_NAME_GJS])
+    const objectStoreTemplate = transactionTemplate.objectStore(STORE_NAME_GJS)
+    var countRequestTemplate = objectStoreTemplate.count()
+    countRequestTemplate.onsuccess = () => {
+      document.querySelector('.js-template-number').innerHTML = countRequestTemplate.result || '0'
+    }
+    
+    const transactionTransporter = db.transaction([STORE_NAME_TRANSPORTER])
+    const objectStoreTransporter = transactionTransporter.objectStore(STORE_NAME_TRANSPORTER)
+    var countRequestTransporter = objectStoreTransporter.count()
+    countRequestTransporter.onsuccess = () => {
+      document.querySelector('.js-transporter-number').innerHTML = countRequestTransporter.result || '0'
+    }
+
+  }
 
   const drawContacts = () => {
     const transaction = db.transaction([STORE_NAME_CONTACT])
